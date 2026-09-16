@@ -142,9 +142,20 @@ void App::ConfigureWindowBounds()
 void App::OnSuspending(Object^ sender, SuspendingEventArgs^ e)
 {
 	(void) sender;	// Parâmetro não usado
-	(void) e;	// Parâmetro não usado
-
-	m_directXPage->SaveInternalState(ApplicationData::Current->LocalSettings->Values);
+	auto deferral = e->SuspendingOperation->GetDeferral();
+	try
+	{
+		if (m_directXPage != nullptr)
+		{
+			m_directXPage->SaveInternalState(ApplicationData::Current->LocalSettings->Values);
+			m_directXPage->ShutdownRuntime();
+		}
+	}
+	catch (...)
+	{
+		// Suspension must always finish, even if state persistence is unavailable.
+	}
+	deferral->Complete();
 }
 
 /// <summary>
@@ -157,7 +168,11 @@ void App::OnResuming(Object ^sender, Object ^args)
 	(void) sender; // Parâmetro não usado
 	(void) args; // Parâmetro não usado
 
-	m_directXPage->LoadInternalState(ApplicationData::Current->LocalSettings->Values);
+	if (m_directXPage != nullptr)
+	{
+		m_directXPage->ResumeRuntime();
+		m_directXPage->LoadInternalState(ApplicationData::Current->LocalSettings->Values);
+	}
 	ConfigureWindowBounds();
 }
 

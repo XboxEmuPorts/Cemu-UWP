@@ -557,11 +557,21 @@ void DirectXPage::InitializeEmulator(float width, float height)
 					hwnd, d3d11Surface,
 					static_cast<int>(outputSize.Width),
 					static_cast<int>(outputSize.Height), dpiScale);
-			m_main->SetDiagnosticCallback([this](const std::string& message) { AppendError(message); });
-			m_main->SetStateCallback([this](CemuEmbedState state) { OnCemuStateChanged(state); });
-			m_main->SetProgressCallback([this](uint64_t copied, uint64_t total, const std::string& path)
+			Platform::WeakReference weakThis(this);
+			m_main->SetDiagnosticCallback([weakThis](const std::string& message)
 			{
-				OnBrokeredProgress(copied, total, path);
+				if (auto page = weakThis.Resolve<DirectXPage>())
+					page->AppendError(message);
+			});
+			m_main->SetStateCallback([weakThis](CemuEmbedState state)
+			{
+				if (auto page = weakThis.Resolve<DirectXPage>())
+					page->OnCemuStateChanged(state);
+			});
+			m_main->SetProgressCallback([weakThis](uint64_t copied, uint64_t total, const std::string& path)
+			{
+				if (auto page = weakThis.Resolve<DirectXPage>())
+					page->OnBrokeredProgress(copied, total, path);
 			});
 			if (!m_main->Start())
 			{
@@ -581,6 +591,16 @@ DirectXPage::~DirectXPage()
 	Window::Current->CoreWindow->KeyDown -= m_coreWindowKeyDownToken;
 	Window::Current->CoreWindow->KeyUp -= m_coreWindowKeyUpToken;
 	SystemNavigationManager::GetForCurrentView()->BackRequested -= m_backRequestedToken;
+	ShutdownRuntime();
+}
+
+void DirectXPage::ShutdownRuntime()
+{
+	if (m_runtimeSuspended)
+		return;
+	m_runtimeSuspended = true;
+	SetSystemPointerForUi(true);
+	SetExternalLoadingVisible(false);
 	m_gamepad = nullptr;
 	if (m_main)
 	{
@@ -589,8 +609,45 @@ DirectXPage::~DirectXPage()
 		disconnected.struct_size = sizeof(disconnected);
 		disconnected.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
 		m_main->SetGamepadState(disconnected);
+		m_main->Stop();
 	}
 	m_main.reset();
+	if (m_deviceResources)
+		m_deviceResources->DetachSwapChainPanel();
+	m_deviceResources.reset();
+	m_cemuReady = false;
+	m_gameRunning = false;
+	m_gamepadProfileReady = false;
+	m_externalLoadingVisible = false;
+	m_hasPublishedGamepadState = false;
+	installedGamesList->Items->Clear();
+	graphicPacksList->Items->Clear();
+	graphicPackGameBox->Items->Clear();
+	dimensionsFigureBox->Items->Clear();
+	std::vector<InstalledTitle>().swap(m_installedTitles);
+	std::vector<InstalledTitle>().swap(m_externalTitles);
+	std::vector<DimensionsFigure>().swap(m_dimensionsFigures);
+	std::vector<uint64_t>().swap(m_graphicPackGameIds);
+}
+
+void DirectXPage::ResumeRuntime()
+{
+	if (!m_runtimeSuspended)
+		return;
+	m_runtimeSuspended = false;
+	try
+	{
+		auto gamepads = Gamepad::Gamepads;
+		if (gamepads && gamepads->Size != 0)
+			m_gamepad = gamepads->GetAt(0);
+	}
+	catch (Platform::Exception^)
+	{
+		m_gamepad = nullptr;
+	}
+	InitializeEmulator(static_cast<float>(emulatorSurface->ActualWidth),
+		static_cast<float>(emulatorSurface->ActualHeight));
+	UpdateGamepadStatus();
 }
 
 void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
@@ -657,34 +714,40 @@ void DirectXPage::OnGamepadAdded(Platform::Object^, Gamepad^ gamepad)
 {
 	// Capture the WGI state while it belongs to the XAML apartment. Cemu uses
 	// the mirrored host state instead of opening this controller through SDL.
+	Platform::WeakReference weakThis(this);
 	create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-		ref new DispatchedHandler([this, gamepad]()
+		ref new DispatchedHandler([weakThis, gamepad]()
 		{
+			auto page = weakThis.Resolve<DirectXPage>();
+			if (!page) return;
 			// WGI raises device events on a system callback thread.  Keep all
 			// page state on the XAML dispatcher; racing OnRendering here can make
 			// the Xbox terminate the packaged game without a managed exception.
-			m_gamepad = gamepad;
-			m_gamepadProfileReady = false;
-			m_gamepadRetryFrames = 59;
-			PublishGamepadState();
-			UpdateGamepadStatus();
+			page->m_gamepad = gamepad;
+			page->m_gamepadProfileReady = false;
+			page->m_gamepadRetryFrames = 59;
+			page->PublishGamepadState();
+			page->UpdateGamepadStatus();
 		})));
 }
 
 void DirectXPage::OnGamepadRemoved(Platform::Object^, Gamepad^ gamepad)
 {
 	// Publish a disconnected host state before updating the UI.
+	Platform::WeakReference weakThis(this);
 	create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-		ref new DispatchedHandler([this, gamepad]()
+		ref new DispatchedHandler([weakThis, gamepad]()
 		{
-			if (m_gamepad == gamepad)
-				m_gamepad = nullptr;
-			m_gamepadProfileReady = false;
-			PublishGamepadState();
-			if (m_virtualMouseEnabled)
-				SetVirtualMouseEnabled(false);
+			auto page = weakThis.Resolve<DirectXPage>();
+			if (!page) return;
+			if (page->m_gamepad == gamepad)
+				page->m_gamepad = nullptr;
+			page->m_gamepadProfileReady = false;
+			page->PublishGamepadState();
+			if (page->m_virtualMouseEnabled)
+				page->SetVirtualMouseEnabled(false);
 			else
-				UpdateGamepadStatus();
+				page->UpdateGamepadStatus();
 		})));
 }
 
@@ -1454,29 +1517,32 @@ void DirectXPage::StartGame_Click(Platform::Object^, RoutedEventArgs^)
 	launchStatus->Text = "Mounting game, update, and DLC...";
 	emulatorPlaceholder->Visibility = CollapsedValue;
 	FocusEmulatorInput();
-	create_task([this, titleId]()
+	const auto main = m_main;
+	Platform::WeakReference weakThis(this);
+	create_task([main, titleId]()
 	{
-		if (!m_main) return false;
-		return m_main->LaunchInstalledTitle(titleId);
-	}).then([this](bool launched)
+		return main && main->LaunchInstalledTitle(titleId);
+	}).then([weakThis](bool launched)
 	{
+		auto page = weakThis.Resolve<DirectXPage>();
+		if (!page) return;
 		if (launched)
 		{
-			m_gameRunning = true;
-			UpdateGamepadStatus();
-			launchStatus->Text = "Game running";
-			FocusEmulatorInput();
+			page->m_gameRunning = true;
+			page->UpdateGamepadStatus();
+			page->launchStatus->Text = "Game running";
+			page->FocusEmulatorInput();
 		}
 		else
 		{
-			m_gameRunning = false;
-			SetGamePresentation(false);
-			SetSystemPointerForUi(true);
-			launchStatus->Text = "Could not start the installed game";
-			AppendError("Could not mount the base game with the installed update and DLC.");
-			SetLibraryActionsEnabled(true);
-			UpdateStartButton();
-			emulatorPlaceholder->Visibility = VisibleValue;
+			page->m_gameRunning = false;
+			page->SetGamePresentation(false);
+			page->SetSystemPointerForUi(true);
+			page->launchStatus->Text = "Could not start the installed game";
+			page->AppendError("Could not mount the base game with the installed update and DLC.");
+			page->SetLibraryActionsEnabled(true);
+			page->UpdateStartButton();
+			page->emulatorPlaceholder->Visibility = VisibleValue;
 		}
 	}, task_continuation_context::use_current());
 }
@@ -1722,6 +1788,7 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 		? "Scanning LocalState\\GamesToInstall..."
 		: "Refreshing library...";
 	const auto main = m_main;
+	Platform::WeakReference weakThis(this);
 	create_task([main, scanLocalFolder]()
 	{
 		LocalInstallScanResult scanResult{};
@@ -1785,9 +1852,11 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 		}
 		auto titles = main ? main->GetInstalledTitles() : std::vector<InstalledTitle>{};
 		return std::make_pair(std::move(titles), scanResult);
-	}).then([this, scanLocalFolder](
+	}).then([weakThis, scanLocalFolder](
 		std::pair<std::vector<InstalledTitle>, LocalInstallScanResult> result)
 	{
+		auto page = weakThis.Resolve<DirectXPage>();
+		if (!page) return;
 		auto titles = std::move(result.first);
 		const auto scanResult = result.second;
 		for (const auto& localGame : scanResult.localGameFiles)
@@ -1801,12 +1870,12 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 			localTitle.graphicPackTitleId = localGame.graphicPackTitleId;
 			titles.emplace_back(std::move(localTitle));
 		}
-		for (const auto& externalTitle : m_externalTitles)
+		for (const auto& externalTitle : page->m_externalTitles)
 			titles.emplace_back(externalTitle);
-		m_installedTitles = std::move(titles);
-		RefreshGraphicPackGames();
-		installedGamesList->Items->Clear();
-		for (const auto& title : m_installedTitles)
+		page->m_installedTitles = std::move(titles);
+		page->RefreshGraphicPackGames();
+		page->installedGamesList->Items->Clear();
+		for (const auto& title : page->m_installedTitles)
 		{
 			std::ostringstream subtitle;
 			if (!title.localGamePath.empty())
@@ -1830,8 +1899,8 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 			auto card = ref new Border();
 			card->CornerRadius = ::Windows::UI::Xaml::CornerRadius(16);
 			card->BorderThickness = Thickness(1);
-			card->BorderBrush = safe_cast<Brush^>(Resources->Lookup("DividerBrush"));
-			card->Background = safe_cast<Brush^>(Resources->Lookup("CardBrush"));
+			card->BorderBrush = safe_cast<Brush^>(page->Resources->Lookup("DividerBrush"));
+			card->Background = safe_cast<Brush^>(page->Resources->Lookup("CardBrush"));
 			auto cardGrid = ref new Grid();
 			auto artRow = ref new RowDefinition();
 			artRow->Height = GridLength(132);
@@ -1841,7 +1910,7 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 			cardGrid->RowDefinitions->Append(infoRow);
 
 			auto art = ref new Border();
-			art->Background = safe_cast<Brush^>(Resources->Lookup("SageBrush"));
+			art->Background = safe_cast<Brush^>(page->Resources->Lookup("SageBrush"));
 			art->CornerRadius = ::Windows::UI::Xaml::CornerRadius(15, 15, 0, 0);
 			if (auto bitmap = DecodeGameIcon(title.iconTga))
 			{
@@ -1855,7 +1924,7 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 				auto fallback = ref new FontIcon();
 				fallback->Glyph = L"\xE7FC";
 				fallback->FontSize = 46;
-				fallback->Foreground = safe_cast<Brush^>(Resources->Lookup("AccentBlueBrush"));
+				fallback->Foreground = safe_cast<Brush^>(page->Resources->Lookup("AccentBlueBrush"));
 				fallback->HorizontalAlignment =
 					::Windows::UI::Xaml::HorizontalAlignment::Center;
 				fallback->VerticalAlignment =
@@ -1872,13 +1941,13 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 				(title.isExternalStorage ? "EXTERNAL STORAGE" : "LOCAL GAMES");
 			source->FontFamily = ref new Windows::UI::Xaml::Media::FontFamily(L"Consolas");
 			source->FontSize = 9;
-			source->Foreground = safe_cast<Brush^>(Resources->Lookup("AccentBlueBrush"));
+			source->Foreground = safe_cast<Brush^>(page->Resources->Lookup("AccentBlueBrush"));
 			info->Children->Append(source);
 			auto name = ref new TextBlock();
 			name->Text = FromUtf8(title.name);
 			name->FontSize = 14;
 			name->FontWeight = Windows::UI::Text::FontWeights::SemiBold;
-			name->Foreground = safe_cast<Brush^>(Resources->Lookup("TextBrush"));
+			name->Foreground = safe_cast<Brush^>(page->Resources->Lookup("TextBrush"));
 			name->TextWrapping = TextWrapping::Wrap;
 			name->MaxLines = 2;
 			name->TextTrimming = TextTrimming::CharacterEllipsis;
@@ -1888,7 +1957,7 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 			metadata->Text = FromUtf8(subtitle.str());
 			metadata->FontFamily = ref new Windows::UI::Xaml::Media::FontFamily(L"Consolas");
 			metadata->FontSize = 9;
-			metadata->Foreground = safe_cast<Brush^>(Resources->Lookup("MutedTextBrush"));
+			metadata->Foreground = safe_cast<Brush^>(page->Resources->Lookup("MutedTextBrush"));
 			metadata->TextTrimming = TextTrimming::CharacterEllipsis;
 			info->Children->Append(metadata);
 			cardGrid->Children->Append(info);
@@ -1904,29 +1973,29 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 					::Windows::UI::Xaml::HorizontalAlignment::Right;
 				deleteButton->VerticalAlignment =
 					::Windows::UI::Xaml::VerticalAlignment::Top;
-				deleteButton->Background = safe_cast<Brush^>(Resources->Lookup("CardBrush"));
-				deleteButton->IsEnabled = !m_gameRunning;
+				deleteButton->Background = safe_cast<Brush^>(page->Resources->Lookup("CardBrush"));
+				deleteButton->IsEnabled = !page->m_gameRunning;
 				const uint64_t titleId = title.titleId;
-				Platform::WeakReference weakThis(this);
+				Platform::WeakReference itemWeakThis(page);
 				deleteButton->Click += ref new RoutedEventHandler(
-					[weakThis, titleId](Platform::Object^, RoutedEventArgs^)
+					[itemWeakThis, titleId](Platform::Object^, RoutedEventArgs^)
 					{
-						auto page = weakThis.Resolve<DirectXPage>();
-						if (page)
-							page->DeleteInstalledTitle(titleId);
+						auto itemPage = itemWeakThis.Resolve<DirectXPage>();
+						if (itemPage)
+							itemPage->DeleteInstalledTitle(titleId);
 					});
 				cardGrid->Children->Append(deleteButton);
 			}
 			card->Child = cardGrid;
 			item->Content = card;
-			installedGamesList->Items->Append(item);
+			page->installedGamesList->Items->Append(item);
 		}
-		const int restoredIndex = FindInstalledTitleIndex(m_selectedTitleId);
-		installedGamesList->SelectedIndex = restoredIndex;
+		const int restoredIndex = page->FindInstalledTitleIndex(page->m_selectedTitleId);
+		page->installedGamesList->SelectedIndex = restoredIndex;
 		if (restoredIndex < 0)
-			m_selectedTitleId = 0;
-		m_libraryBusy = false;
-		SetLibraryActionsEnabled(true);
+			page->m_selectedTitleId = 0;
+		page->m_libraryBusy = false;
+		page->SetLibraryActionsEnabled(true);
 		if (scanLocalFolder)
 		{
 			std::ostringstream status;
@@ -1944,36 +2013,36 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 			if (scanResult.failed)
 			{
 				status << "; " << scanResult.failed << " failed";
-				AppendError("Some content in LocalState\\GamesToInstall could not be scanned. Each source must be a supported game file, a title.tmd folder, or an extracted title with code, content, and meta folders.");
+				page->AppendError("Some content in LocalState\\GamesToInstall could not be scanned. Each source must be a supported game file, a title.tmd folder, or an extracted title with code, content, and meta folders.");
 			}
 			if (scanResult.graphicPackFailures)
 			{
 				status << "; " << scanResult.graphicPackFailures << " Graphic Pack import(s) failed";
-				AppendError("Some Graphic Packs in LocalState\\GamesToInstall could not be imported. Each pack folder must contain a valid rules.txt file.");
+				page->AppendError("Some Graphic Packs in LocalState\\GamesToInstall could not be imported. Each pack folder must contain a valid rules.txt file.");
 			}
 			if (scanResult.markerWarnings)
 			{
 				status << "; " << scanResult.markerWarnings << " marker warning(s)";
-				AppendError("Installed content could not be marked as processed and may be detected again on the next scan.");
+				page->AppendError("Installed content could not be marked as processed and may be detected again on the next scan.");
 			}
-			launchStatus->Text = FromUtf8(status.str());
+			page->launchStatus->Text = FromUtf8(status.str());
 		}
 		else
 		{
-			if (!m_externalTitles.empty())
+			if (!page->m_externalTitles.empty())
 			{
-				launchStatus->Text = FromUtf8("External scan complete; " +
-					std::to_string(m_externalTitles.size()) +
+				page->launchStatus->Text = FromUtf8("External scan complete; " +
+					std::to_string(page->m_externalTitles.size()) +
 					" supported title item(s) ready to launch from external storage");
 			}
 			else
 			{
-				launchStatus->Text = m_installedTitles.empty()
+				page->launchStatus->Text = page->m_installedTitles.empty()
 					? "No games installed"
 					: (restoredIndex >= 0 ? "Ready to start" : "Select an installed game");
 			}
 		}
-		UpdateStartButton();
+		page->UpdateStartButton();
 	}, task_continuation_context::use_current());
 }
 
@@ -2057,9 +2126,14 @@ void DirectXPage::LoadSettings()
 	select(cpuModeBox, settings.cpu_mode, 4);
 	select(consoleLanguageBox, settings.console_language, 11);
 	select(emulatedControllerBox, settings.emulated_controller_type, 3);
-	select(graphicsApiBox, settings.graphics_api == 4 ? 1 : 0, 1);
-	rendererMetricsText->Text = settings.graphics_api == 4 ?
-		"Renderer         D3D12 experimental" : "Renderer         D3D11";
+	// The UWP host exposes one supported graphics path. Normalize settings from
+	// older builds so an unsupported saved value cannot remain active.
+	if (settings.graphics_api != 3)
+	{
+		settings.graphics_api = 3;
+		m_main->SetSettings(settings);
+	}
+	rendererMetricsText->Text = "Renderer         D3D11";
 	select(vsyncBox, settings.vsync == 0 ? 0 : 1, 1);
 	bootSoundCheck->IsChecked = settings.play_boot_sound != 0;
 	disableScreensaverCheck->IsChecked = settings.disable_screensaver != 0;
@@ -2148,7 +2222,7 @@ void DirectXPage::SaveSettings()
 	settings.cpu_mode = cpuModeBox->SelectedIndex;
 	settings.console_language = consoleLanguageBox->SelectedIndex;
 	settings.emulated_controller_type = emulatedControllerBox->SelectedIndex;
-	settings.graphics_api = graphicsApiBox->SelectedIndex == 1 ? 4 : 3;
+	settings.graphics_api = 3;
 	settings.vsync = vsyncBox->SelectedIndex;
 	settings.play_boot_sound = checked(bootSoundCheck);
 	settings.disable_screensaver = checked(disableScreensaverCheck);
@@ -2189,7 +2263,7 @@ void DirectXPage::SaveSettings()
 	}
 	if (m_gamepad)
 		TryConfigureDefaultGamepad();
-	settingsStatus->Text = "Settings saved automatically. Graphics API, USB and other startup options apply after restarting the app.";
+	settingsStatus->Text = "Settings saved automatically. USB and other startup options apply after restarting the app.";
 }
 
 void DirectXPage::ClearErrors_Click(Platform::Object^, RoutedEventArgs^)
@@ -2346,61 +2420,73 @@ void DirectXPage::SetExternalLoadingVisible(bool visible)
 
 void DirectXPage::AppendError(const std::string& message)
 {
+	constexpr unsigned int maxRetainedErrors = 50;
 	auto text = FromUtf8(message);
 	if (Dispatcher->HasThreadAccess)
 	{
 		errorsList->Items->Append(text);
+		while (errorsList->Items->Size > maxRetainedErrors)
+			errorsList->Items->RemoveAt(0);
 		return;
 	}
+	Platform::WeakReference weakThis(this);
 	create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-		ref new DispatchedHandler([this, text]()
+		ref new DispatchedHandler([weakThis, text, maxRetainedErrors]()
 		{
-			errorsList->Items->Append(text);
+			if (auto page = weakThis.Resolve<DirectXPage>())
+			{
+				page->errorsList->Items->Append(text);
+				while (page->errorsList->Items->Size > maxRetainedErrors)
+					page->errorsList->Items->RemoveAt(0);
+			}
 		})));
 }
 
 void DirectXPage::OnCemuStateChanged(CemuEmbedState state)
 {
+	Platform::WeakReference weakThis(this);
 	create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-		ref new DispatchedHandler([this, state]()
+		ref new DispatchedHandler([weakThis, state]()
 		{
-			m_cemuReady = state == CEMU_EMBED_STATE_READY;
+			auto page = weakThis.Resolve<DirectXPage>();
+			if (!page) return;
+			page->m_cemuReady = state == CEMU_EMBED_STATE_READY;
 			if (state == CEMU_EMBED_STATE_READY)
 			{
-				launchStatus->Text = "Loading library...";
-				SetLibraryActionsEnabled(true);
-				m_gamepadRetryFrames = 59;
-				UpdateActiveAccount();
-				TryConfigureDefaultGamepad();
-				RestoreExternalStorageFolders();
-				RefreshDimensionsFigures();
-				LoadSettings();
+				page->launchStatus->Text = "Loading library...";
+				page->SetLibraryActionsEnabled(true);
+				page->m_gamepadRetryFrames = 59;
+				page->UpdateActiveAccount();
+				page->TryConfigureDefaultGamepad();
+				page->RestoreExternalStorageFolders();
+				page->RefreshDimensionsFigures();
+				page->LoadSettings();
 			}
 			else if (state == CEMU_EMBED_STATE_INITIALIZING)
-				launchStatus->Text = "Initializing emulator...";
+				page->launchStatus->Text = "Initializing emulator...";
 			else if (state == CEMU_EMBED_STATE_FAILED)
 			{
-				launchStatus->Text = "Failed to initialize the emulator";
-				accountStatus->Text = "Account unavailable";
-				accountStatusIcon->Opacity = 0.45;
+				page->launchStatus->Text = "Failed to initialize the emulator";
+				page->accountStatus->Text = "Account unavailable";
+				page->accountStatusIcon->Opacity = 0.45;
 			}
 			if (state != CEMU_EMBED_STATE_READY)
 			{
-				m_gameRunning = false;
-				SetExternalLoadingVisible(false);
-				SetGamePresentation(false);
-				SetSystemPointerForUi(true);
-				if (m_virtualMouseEnabled)
-					SetVirtualMouseEnabled(false);
-				SetLibraryActionsEnabled(false);
-				dimensionsFigureBox->IsEnabled = false;
-				dimensionsSlotBox->IsEnabled = false;
-				dimensionsSourceSlotBox->IsEnabled = false;
-				placeDimensionsFigureButton->IsEnabled = false;
-				removeDimensionsFigureButton->IsEnabled = false;
-				moveDimensionsFigureButton->IsEnabled = false;
+				page->m_gameRunning = false;
+				page->SetExternalLoadingVisible(false);
+				page->SetGamePresentation(false);
+				page->SetSystemPointerForUi(true);
+				if (page->m_virtualMouseEnabled)
+					page->SetVirtualMouseEnabled(false);
+				page->SetLibraryActionsEnabled(false);
+				page->dimensionsFigureBox->IsEnabled = false;
+				page->dimensionsSlotBox->IsEnabled = false;
+				page->dimensionsSourceSlotBox->IsEnabled = false;
+				page->placeDimensionsFigureButton->IsEnabled = false;
+				page->removeDimensionsFigureButton->IsEnabled = false;
+				page->moveDimensionsFigureButton->IsEnabled = false;
 			}
-			UpdateStartButton();
+			page->UpdateStartButton();
 		})));
 }
 
@@ -2627,20 +2713,23 @@ void DirectXPage::TryConfigureDefaultGamepad()
 
 void DirectXPage::OnBrokeredProgress(uint64_t bytesCopied, uint64_t totalBytes, const std::string& path)
 {
+	Platform::WeakReference weakThis(this);
 	if (totalBytes == 0)
 	{
 		const auto detail = path.empty() ? "Indexing external title folders..." : path;
 		auto text = FromUtf8(detail);
 		create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-			ref new DispatchedHandler([this, text]()
+			ref new DispatchedHandler([weakThis, text]()
 			{
-				launchStatus->Text = text;
-				if (!m_externalLoadingVisible)
+				auto page = weakThis.Resolve<DirectXPage>();
+				if (!page) return;
+				page->launchStatus->Text = text;
+				if (!page->m_externalLoadingVisible)
 					return;
-				externalLoadingTitle->Text = "Preparing external game";
-				externalLoadingDetail->Text = text;
-				externalLoadingProgress->IsIndeterminate = true;
-				externalLoadingPercent->Text = "...";
+				page->externalLoadingTitle->Text = "Preparing external game";
+				page->externalLoadingDetail->Text = text;
+				page->externalLoadingProgress->IsIndeterminate = true;
+				page->externalLoadingPercent->Text = "...";
 			})));
 		return;
 	}
@@ -2648,19 +2737,21 @@ void DirectXPage::OnBrokeredProgress(uint64_t bytesCopied, uint64_t totalBytes, 
 	{
 		auto text = FromUtf8(path);
 		create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-			ref new DispatchedHandler([this, text]()
+			ref new DispatchedHandler([weakThis, text]()
 			{
-				launchStatus->Text = text;
-				if (!m_externalLoadingVisible)
+				auto page = weakThis.Resolve<DirectXPage>();
+				if (!page) return;
+				page->launchStatus->Text = text;
+				if (!page->m_externalLoadingVisible)
 					return;
-				externalLoadingProgress->IsIndeterminate = false;
-				externalLoadingProgress->Value = 100.0;
-				externalLoadingPercent->Text = "100%";
-				externalLoadingDetail->Text = text;
+				page->externalLoadingProgress->IsIndeterminate = false;
+				page->externalLoadingProgress->Value = 100.0;
+				page->externalLoadingPercent->Text = "100%";
+				page->externalLoadingDetail->Text = text;
 				// The brokered-storage phase is complete. Remove the XAML overlay now
 				// so Cemu's native shader-cache progress, rendered into the underlying
 				// SwapChainPanel, remains visible while title startup continues.
-				SetExternalLoadingVisible(false);
+				page->SetExternalLoadingVisible(false);
 			})));
 		return;
 	}
@@ -2673,16 +2764,18 @@ void DirectXPage::OnBrokeredProgress(uint64_t bytesCopied, uint64_t totalBytes, 
 		<< "% (" << std::setprecision(2) << copiedGiB << " / " << totalGiB << " GiB)";
 	auto text = FromUtf8(status.str());
 	create_task(Dispatcher->RunAsync(CoreDispatcherPriority::Normal,
-		ref new DispatchedHandler([this, text, displayPercent]()
+		ref new DispatchedHandler([weakThis, text, displayPercent]()
 		{
-			launchStatus->Text = text;
-			if (!m_externalLoadingVisible)
+			auto page = weakThis.Resolve<DirectXPage>();
+			if (!page) return;
+			page->launchStatus->Text = text;
+			if (!page->m_externalLoadingVisible)
 				return;
-			externalLoadingProgress->IsIndeterminate = false;
-			externalLoadingProgress->Value = displayPercent;
-			externalLoadingPercent->Text = FromUtf8(
+			page->externalLoadingProgress->IsIndeterminate = false;
+			page->externalLoadingProgress->Value = displayPercent;
+			page->externalLoadingPercent->Text = FromUtf8(
 				std::to_string(static_cast<unsigned int>(std::lround(displayPercent))) + "%");
-			externalLoadingDetail->Text = text;
+			page->externalLoadingDetail->Text = text;
 		})));
 }
 

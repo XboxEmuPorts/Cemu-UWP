@@ -800,6 +800,16 @@ bool Cemu_UWP_HostMain::IsReady() const
 	return m_ready.load(std::memory_order_acquire);
 }
 
+void Cemu_UWP_HostMain::ReplaceD3D11Surface(const CemuEmbedD3D11Surface& surface)
+{
+	m_d3d11Surface = surface;
+	if (!m_instance)
+		return;
+	CemuEmbedSurface embedSurface{ sizeof(embedSurface), m_window, &m_d3d11Surface,
+		m_width, m_height, m_dpiScale };
+	CemuEmbed_SetSurface(m_instance, &embedSurface);
+}
+
 void Cemu_UWP_HostMain::ResizeSurface(int width, int height, double dpiScale)
 {
 	m_width = (std::max)(width, 1);
@@ -987,10 +997,17 @@ void Cemu_UWP_HostMain::Pump() { if (m_instance) CemuEmbed_Pump(m_instance); }
 
 void Cemu_UWP_HostMain::Stop()
 {
-	if (!m_instance) return;
-	CemuEmbed_Destroy(m_instance);
-	m_instance = nullptr;
+	if (m_instance)
+	{
+		CemuEmbed_Destroy(m_instance);
+		m_instance = nullptr;
+	}
+	m_ready.store(false, std::memory_order_release);
 	m_activeExternalFolders.clear();
+	m_activeExternalFolders.shrink_to_fit();
+	m_diagnosticCallback = {};
+	m_stateCallback = {};
+	m_progressCallback = {};
 	m_started = false;
 }
 

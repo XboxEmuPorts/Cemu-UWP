@@ -574,7 +574,7 @@
               <Grid>
                 <StackPanel>
                   <TextBlock Text="Cemu settings" Style="{StaticResource SectionHeadingStyle}" />
-                  <TextBlock Text="Direct3D 11 is the stable backend; Direct3D 12 is experimental. Graphics API changes apply after restarting the app."
+                  <TextBlock Text="Direct3D 11 is the fixed graphics backend for the UWP host."
                              Style="{StaticResource HelpfulTextStyle}" Margin="0,2,16,8" />
                 </StackPanel>
               </Grid>
@@ -610,11 +610,7 @@
                       </StackPanel>
                       <StackPanel Grid.Column="1">
                         <TextBlock Text="Graphics" Style="{StaticResource SectionHeadingStyle}" />
-                        <ComboBox x:Name="graphicsApiBox" Header="Graphics API" SelectedIndex="0" SelectionChanged="SettingsSelectionChanged">
-                          <ComboBoxItem Content="Direct3D 11"/>
-                          <ComboBoxItem Content="Direct3D 12 (experimental)"/>
-                        </ComboBox>
-                        <TextBlock Text="Direct3D 12 is an experimental internal translation of Cemu's Vulkan command path. Mesa is not required or packaged." TextWrapping="Wrap" Style="{StaticResource HelpfulTextStyle}"/>
+                        <TextBlock Text="Graphics API: Direct3D 11" Style="{StaticResource HelpfulTextStyle}"/>
                         <ComboBox x:Name="vsyncBox" Header="VSync" SelectedIndex="1" SelectionChanged="SettingsSelectionChanged"><ComboBoxItem Content="Off"/><ComboBoxItem Content="On"/></ComboBox>
                         <CheckBox x:Name="asyncCompileCheck" Content="Async shader compile" Checked="SettingsCheckChanged" Unchecked="SettingsCheckChanged"/>
                         <CheckBox x:Name="gx2SyncCheck" Content="GX2DrawDone synchronization" Checked="SettingsCheckChanged" Unchecked="SettingsCheckChanged"/>

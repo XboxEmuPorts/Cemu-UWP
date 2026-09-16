@@ -24,6 +24,8 @@ namespace Cemu_UWP_Host
 		virtual ~DirectXPage();
 		void SaveInternalState(Windows::Foundation::Collections::IPropertySet^ state);
 		void LoadInternalState(Windows::Foundation::Collections::IPropertySet^ state);
+		void ShutdownRuntime();
+		void ResumeRuntime();
 
 	private:
 		void InitializeEmulator(float width, float height);
@@ -135,6 +137,7 @@ namespace Cemu_UWP_Host
 		bool m_performanceMetricsVisible = false;
 		bool m_loadingSettings = false;
 		bool m_loadingGraphicPacks = false;
+		bool m_runtimeSuspended = false;
 		uint64_t m_selectedTitleId = 0;
 		bool m_restoringCommittedSelection = false;
 		// The Xbox input object belongs to the XAML apartment. Keep one snapshot
