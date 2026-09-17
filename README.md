@@ -239,7 +239,7 @@ Projects/
 - Visual Studio 18 2026 with the MSVC v145 C++ toolchain and UWP C++ tools.
 - CMake 3.21.1 or newer.
 - A local checkout of [rodrigoandrigo/Cemu](https://github.com/rodrigoandrigo/Cemu).
-- A local checkout of SDL3-UWP.
+- A local checkout of [rodrigoandrigo/SDL3_UWP](https://github.com/rodrigoandrigo/SDL3_UWP).
 - Xbox Series S with Developer Mode for target validation and deployment.
 
 Use the native Visual Studio/CMake tools. Do not configure the MSVC build with an MSYS2 CMake executable.
