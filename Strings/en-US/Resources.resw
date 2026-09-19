@@ -771,4 +771,16 @@ to get started.</value>
   <data name="Text_8E226127F3E923EF" xml:space="preserve">
     <value>＋  Install graphic packs</value>
   </data>
+  <data name="Text_A281FCC7AEADBFB6" xml:space="preserve">
+    <value>Controllers</value>
+  </data>
+  <data name="Text_4250277296392A42" xml:space="preserve">
+    <value>Player assignments are kept for this app session. Player 1 uses the selected Wii U controller type; players 2–4 use Wii U Pro Controller.</value>
+  </data>
+  <data name="Text_82A4E28AB5B56670" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="Text_7410E82EBF5FE820" xml:space="preserve">
+    <value>Xbox controller</value>
+  </data>
 </root>

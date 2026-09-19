@@ -634,9 +634,16 @@ bool Cemu_UWP_HostMain::EnsureDefaultGamepadProfile()
 		CEMU_EMBED_OK && ready != 0;
 }
 
-bool Cemu_UWP_HostMain::SetGamepadState(const CemuEmbedGamepadState& state)
+bool Cemu_UWP_HostMain::SetGamepadState(uint32_t playerIndex, const CemuEmbedGamepadState& state)
 {
-	return m_instance && CemuEmbed_SetHostGamepadState(m_instance, &state) == CEMU_EMBED_OK;
+	return m_instance && CemuEmbed_SetHostGamepadStateForPlayer(m_instance, playerIndex, &state) == CEMU_EMBED_OK;
+}
+
+bool Cemu_UWP_HostMain::GetGamepadRumble(uint32_t playerIndex, float& intensity)
+{
+	intensity = 0.0f;
+	return m_instance &&
+		CemuEmbed_GetHostGamepadRumble(m_instance, playerIndex, &intensity) == CEMU_EMBED_OK;
 }
 
 bool Cemu_UWP_HostMain::SetVirtualMouse(int x, int y, bool leftDown, bool enabled)

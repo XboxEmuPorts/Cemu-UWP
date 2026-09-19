@@ -3,7 +3,9 @@
 #include "DirectXPage.g.h"
 #include "Cemu_UWP_HostMain.h"
 #include "Common/DeviceResources.h"
+#include <array>
 #include <chrono>
+#include <string>
 
 namespace Cemu_UWP_Host
 {
@@ -97,8 +99,16 @@ namespace Cemu_UWP_Host
 		void UpdateStartButton();
 		void UpdateSelectedShaderCount();
 		int FindInstalledTitleIndex(uint64_t titleId) const;
+		int FindGamepadSlot(Windows::Gaming::Input::Gamepad^ gamepad) const;
+		std::wstring GetGamepadIdentity(Windows::Gaming::Input::Gamepad^ gamepad) const;
+		std::wstring GetGamepadDisplayName(Windows::Gaming::Input::Gamepad^ gamepad) const;
+		int AssignGamepadSlot(Windows::Gaming::Input::Gamepad^ gamepad);
+		void DisconnectGamepadSlot(size_t slot);
+		void RefreshGamepads();
 		void UpdateGamepadStatus();
-		CemuEmbedGamepadState PublishGamepadState();
+		void UpdateGamepadVibration();
+		void StopGamepadVibration(Windows::Gaming::Input::Gamepad^ gamepad);
+		CemuEmbedGamepadState PublishGamepadStates();
 		void UpdateActiveAccount();
 		void RefreshDimensionsFigures();
 		void RefreshGraphicPackGames();
@@ -121,10 +131,14 @@ namespace Cemu_UWP_Host
 		Windows::Foundation::EventRegistrationToken m_coreWindowKeyDownToken{};
 		Windows::Foundation::EventRegistrationToken m_coreWindowKeyUpToken{};
 		Windows::Foundation::EventRegistrationToken m_backRequestedToken{};
-		// Keep the WinRT controller discovered on the XAML apartment. Querying
+		// Keep WinRT controllers discovered on the XAML apartment. Querying
 		// Gamepad::Gamepads on every composition frame re-enters Xbox PnP/user
 		// association code and can produce E_INVALIDARG/E_ACCESSDENIED failures.
-		Windows::Gaming::Input::Gamepad^ m_gamepad = nullptr;
+		std::array<Windows::Gaming::Input::Gamepad^, CEMU_EMBED_MAX_GAMEPADS> m_gamepads{};
+		std::array<std::wstring, CEMU_EMBED_MAX_GAMEPADS> m_gamepadIds{};
+		std::array<std::wstring, CEMU_EMBED_MAX_GAMEPADS> m_gamepadNames{};
+		std::array<uint64_t, CEMU_EMBED_MAX_GAMEPADS> m_gamepadDisconnectedOrder{};
+		uint64_t m_gamepadDisconnectSequence = 0;
 		Windows::UI::Core::CoreCursor^ m_savedSystemPointerCursor = nullptr;
 		bool m_systemPointerHidden = false;
 		bool m_cemuReady = false;
@@ -142,10 +156,11 @@ namespace Cemu_UWP_Host
 		bool m_runtimeSuspended = false;
 		uint64_t m_selectedTitleId = 0;
 		bool m_restoringCommittedSelection = false;
-		// The Xbox input object belongs to the XAML apartment. Keep one snapshot
-		// per composition frame and send it to the DLL only when it changed.
-		CemuEmbedGamepadState m_lastPublishedGamepadState{};
-		bool m_hasPublishedGamepadState = false;
+		// Xbox input objects belong to the XAML apartment. Keep one snapshot per
+		// player and send it to the DLL only when that player's state changed.
+		std::array<CemuEmbedGamepadState, CEMU_EMBED_MAX_GAMEPADS> m_lastPublishedGamepadStates{};
+		std::array<bool, CEMU_EMBED_MAX_GAMEPADS> m_hasPublishedGamepadStates{};
+		std::array<float, CEMU_EMBED_MAX_GAMEPADS> m_lastAppliedGamepadRumble{};
 		double m_virtualMouseX = 0.0;
 		double m_virtualMouseY = 0.0;
 		std::chrono::steady_clock::time_point m_virtualMouseLastUpdate{};
