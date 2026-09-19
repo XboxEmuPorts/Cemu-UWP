@@ -16,7 +16,7 @@ Implemented and currently available:
 - Embedded Cemu lifecycle without creating the desktop wxWidgets interface.
 - Native Direct3D 11 rendering inside the UWP application.
 - Experimental internal Vulkan-to-Direct3D 12 backend. It keeps Cemu's Vulkan renderer front-end and redirects its Vulkan dispatch into an in-process D3D12 translation layer. Mesa/Dozen is design reference only and is not a runtime or build dependency.
-- Xbox controller input, automatic player-one profile, selectable Wii U controller type, and in-game virtual mouse.
+- Up to four Xbox controllers, automatic multiplayer profiles, selectable player-one Wii U controller type, and in-game virtual mouse.
 - Installed-game library with base game, update, DLC, region, version, and Graphic Pack information.
 - Direct launch of WUD, WUX, ISO, WUA, WUHB, RPX, and ELF files.
 - Installation of extracted base games, updates, and DLC.
@@ -132,9 +132,11 @@ An RPX or ELF title may require adjacent RPL modules and supporting content. Rec
 
 ### Xbox controls
 
-- Xbox-compatible controllers are discovered through `Windows.Gaming.Input::Gamepad` on the XAML apartment.
+- Up to four Xbox-compatible controllers are discovered through `Windows.Gaming.Input::Gamepad` on the XAML apartment and assigned to stable player slots.
 - Only plain input snapshots cross into Cemu worker threads; apartment-affine WinRT objects are retained by the host.
-- A player-one Wii U GamePad profile is created automatically when required.
+- Player one keeps the Wii U controller type selected in Settings; players two through four use Wii U Pro Controller profiles.
+- The four-player Cemu topology is prepared before a title starts. Later connect/disconnect events update only host-fed controller state, so hot-plug does not rebuild Cemu input objects while a game is running.
+- Disconnected multiplayer slots are hidden from the emulated WPAD APIs until their physical Xbox controller is connected, avoiding ghost local players.
 - The top-bar controller and account indicators are compact icons suitable for television layouts.
 - The system controller cursor is disabled while the emulator is running.
 

@@ -500,19 +500,9 @@ DirectXPage::DirectXPage()
 			this, &DirectXPage::OnCoreWindowKeyDown);
 	m_backRequestedToken = SystemNavigationManager::GetForCurrentView()->BackRequested +=
 		ref new EventHandler<BackRequestedEventArgs^>(this, &DirectXPage::OnBackRequested);
-	// The Added event is not guaranteed to be replayed for a controller that
-	// was connected before the app started. Enumerate once, then rely only on
-	// Added/Removed to maintain this apartment-owned reference.
-	try
-	{
-		auto gamepads = Gamepad::Gamepads;
-		if (gamepads && gamepads->Size != 0)
-			m_gamepad = gamepads->GetAt(0);
-	}
-	catch (Platform::Exception^)
-	{
-		m_gamepad = nullptr;
-	}
+	// Added is not guaranteed to be replayed for controllers connected before
+	// app startup. Enumerate once, then keep stable apartment-owned player slots.
+	RefreshGamepads();
 	m_renderingToken =
 		CompositionTarget::Rendering += ref new EventHandler<Platform::Object^>(this, &DirectXPage::OnRendering);
 	UpdateGamepadStatus();
@@ -657,14 +647,16 @@ void DirectXPage::ShutdownRuntime()
 	m_runtimeSuspended = true;
 	SetSystemPointerForUi(true);
 	SetExternalLoadingVisible(false);
-	m_gamepad = nullptr;
+	for (auto& gamepad : m_gamepads)
+		gamepad = nullptr;
 	if (m_main)
 	{
 		m_main->SetVirtualMouse(0, 0, false, false);
 		CemuEmbedGamepadState disconnected{};
 		disconnected.struct_size = sizeof(disconnected);
 		disconnected.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
-		m_main->SetGamepadState(disconnected);
+		for (uint32_t playerIndex = 0; playerIndex < CEMU_EMBED_MAX_GAMEPADS; ++playerIndex)
+			m_main->SetGamepadState(playerIndex, disconnected);
 		m_main->Stop();
 	}
 	m_main.reset();
@@ -675,7 +667,7 @@ void DirectXPage::ShutdownRuntime()
 	m_gameRunning = false;
 	m_gamepadProfileReady = false;
 	m_externalLoadingVisible = false;
-	m_hasPublishedGamepadState = false;
+	m_hasPublishedGamepadStates.fill(false);
 	installedGamesList->Items->Clear();
 	graphicPacksList->Items->Clear();
 	graphicPackGameBox->Items->Clear();
@@ -691,19 +683,59 @@ void DirectXPage::ResumeRuntime()
 	if (!m_runtimeSuspended)
 		return;
 	m_runtimeSuspended = false;
-	try
-	{
-		auto gamepads = Gamepad::Gamepads;
-		if (gamepads && gamepads->Size != 0)
-			m_gamepad = gamepads->GetAt(0);
-	}
-	catch (Platform::Exception^)
-	{
-		m_gamepad = nullptr;
-	}
+	RefreshGamepads();
 	InitializeEmulator(static_cast<float>(emulatorSurface->ActualWidth),
 		static_cast<float>(emulatorSurface->ActualHeight));
 	UpdateGamepadStatus();
+}
+
+void DirectXPage::RefreshGamepads()
+{
+	for (auto& gamepad : m_gamepads)
+		gamepad = nullptr;
+	m_hasPublishedGamepadStates.fill(false);
+	try
+	{
+		auto gamepads = Gamepad::Gamepads;
+		if (!gamepads)
+			return;
+		const auto count = (std::min)(static_cast<size_t>(gamepads->Size), m_gamepads.size());
+		for (size_t index = 0; index < count; ++index)
+			m_gamepads[index] = gamepads->GetAt(static_cast<unsigned int>(index));
+	}
+	catch (Platform::Exception^)
+	{
+		for (auto& gamepad : m_gamepads)
+			gamepad = nullptr;
+	}
+}
+
+int DirectXPage::FindGamepadSlot(Gamepad^ gamepad) const
+{
+	if (!gamepad)
+		return -1;
+	for (size_t index = 0; index < m_gamepads.size(); ++index)
+		if (m_gamepads[index] == gamepad)
+			return static_cast<int>(index);
+	return -1;
+}
+
+int DirectXPage::AssignGamepadSlot(Gamepad^ gamepad)
+{
+	if (!gamepad)
+		return -1;
+	const int existing = FindGamepadSlot(gamepad);
+	if (existing >= 0)
+		return existing;
+	for (size_t index = 0; index < m_gamepads.size(); ++index)
+	{
+		if (m_gamepads[index] != nullptr)
+			continue;
+		m_gamepads[index] = gamepad;
+		m_hasPublishedGamepadStates[index] = false;
+		return static_cast<int>(index);
+	}
+	return -1;
 }
 
 void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
@@ -735,7 +767,7 @@ void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
 	if (m_gameRunning)
 		SetSystemPointerForUi(false);
 	if (m_main) m_main->Pump();
-	const auto gamepadState = PublishGamepadState();
+	const auto gamepadState = PublishGamepadStates();
 	constexpr uint32_t viewButton = 1u << 4;
 	constexpr uint32_t menuButton = 1u << 6;
 	const bool optionsChord = m_gameRunning &&
@@ -758,7 +790,7 @@ void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
 	// A controller profile changes Cemu's input topology.  On Xbox this must
 	// complete before the title starts; changing it while Latte is consuming
 	// controller state can terminate the packaged process.
-	if (!m_gameRunning && m_cemuReady && !m_gamepadProfileReady && m_gamepad != nullptr &&
+	if (!m_gameRunning && m_cemuReady && !m_gamepadProfileReady && m_gamepads[0] != nullptr &&
 		++m_gamepadRetryFrames >= 60)
 	{
 		m_gamepadRetryFrames = 0;
@@ -776,13 +808,14 @@ void DirectXPage::OnGamepadAdded(Platform::Object^, Gamepad^ gamepad)
 		{
 			auto page = weakThis.Resolve<DirectXPage>();
 			if (!page) return;
-			// WGI raises device events on a system callback thread.  Keep all
+			// WGI raises device events on a system callback thread. Keep all
 			// page state on the XAML dispatcher; racing OnRendering here can make
 			// the Xbox terminate the packaged game without a managed exception.
-			page->m_gamepad = gamepad;
-			page->m_gamepadProfileReady = false;
-			page->m_gamepadRetryFrames = 59;
-			page->PublishGamepadState();
+			const int slot = page->AssignGamepadSlot(gamepad);
+			if (slot < 0) return;
+			if (!page->m_gamepadProfileReady)
+				page->m_gamepadRetryFrames = 59;
+			page->PublishGamepadStates();
 			page->UpdateGamepadStatus();
 		})));
 }
@@ -796,11 +829,11 @@ void DirectXPage::OnGamepadRemoved(Platform::Object^, Gamepad^ gamepad)
 		{
 			auto page = weakThis.Resolve<DirectXPage>();
 			if (!page) return;
-			if (page->m_gamepad == gamepad)
-				page->m_gamepad = nullptr;
-			page->m_gamepadProfileReady = false;
-			page->PublishGamepadState();
-			if (page->m_virtualMouseEnabled)
+			const int slot = page->FindGamepadSlot(gamepad);
+			if (slot >= 0)
+				page->m_gamepads[static_cast<size_t>(slot)] = nullptr;
+			page->PublishGamepadStates();
+			if (slot == 0 && page->m_virtualMouseEnabled)
 				page->SetVirtualMouseEnabled(false);
 			else
 				page->UpdateGamepadStatus();
@@ -1548,7 +1581,7 @@ void DirectXPage::StartGame_Click(Platform::Object^, RoutedEventArgs^)
 	// Keep Windows.Gaming.Input on the XAML apartment and finish the plain
 	// Cemu profile setup before the game creates its input threads.  This is
 	// the Xbox/Durango-safe lifetime model: no WGI object crosses into Cemu.
-	const auto gamepadState = PublishGamepadState();
+	const auto gamepadState = PublishGamepadStates();
 	if (gamepadState.connected)
 	{
 		TryConfigureDefaultGamepad();
@@ -1776,7 +1809,7 @@ void DirectXPage::BeginExternalLaunch(std::function<bool()> launchOperation)
 {
 	if (!m_main || !m_cemuReady || m_libraryBusy || m_gameRunning || !launchOperation)
 		return;
-	const auto gamepadState = PublishGamepadState();
+	const auto gamepadState = PublishGamepadStates();
 	if (gamepadState.connected)
 	{
 		TryConfigureDefaultGamepad();
@@ -2319,7 +2352,7 @@ void DirectXPage::SaveSettings()
 		settingsStatus->Text = "Could not save Cemu settings.";
 		return;
 	}
-	if (m_gamepad)
+	if (m_gamepads[0])
 		TryConfigureDefaultGamepad();
 	settingsStatus->Text = "Settings saved automatically. USB and other startup options apply after restarting the app.";
 }
@@ -2647,16 +2680,19 @@ void DirectXPage::UpdateVirtualMouse(const CemuEmbedGamepadState& gamepad)
 
 void DirectXPage::UpdateGamepadStatus()
 {
-	if (!m_gamepad)
+	size_t connectedCount = 0;
+	for (const auto gamepad : m_gamepads)
+		if (gamepad != nullptr)
+			++connectedCount;
+	if (connectedCount == 0)
 	{
 		controllerStatus->Text = "Controller disconnected";
 		controllerStatus->Opacity = 0.65;
 		controllerStatusIcon->Opacity = 0.45;
-		m_gamepadProfileReady = false;
 		return;
 	}
 	std::wostringstream text;
-	text << L"Controller connected";
+	text << connectedCount << (connectedCount == 1 ? L" controller connected" : L" controllers connected");
 	if (!m_gamepadProfileReady)
 		text << L" \u2022 preparing";
 	else if (m_virtualMouseEnabled)
@@ -2666,67 +2702,69 @@ void DirectXPage::UpdateGamepadStatus()
 	controllerStatusIcon->Opacity = 1.0;
 }
 
-CemuEmbedGamepadState DirectXPage::PublishGamepadState()
+CemuEmbedGamepadState DirectXPage::PublishGamepadStates()
 {
-	CemuEmbedGamepadState state{};
-	state.struct_size = sizeof(state);
-	state.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
+	CemuEmbedGamepadState primaryState{};
+	primaryState.struct_size = sizeof(primaryState);
+	primaryState.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
 	if (!m_main)
-		return state;
-	auto gamepad = m_gamepad;
-	if (!gamepad)
-	{
-		if (!m_hasPublishedGamepadState ||
-			std::memcmp(&state, &m_lastPublishedGamepadState, sizeof(state)) != 0)
-		{
-			m_main->SetGamepadState(state);
-			m_lastPublishedGamepadState = state;
-			m_hasPublishedGamepadState = true;
-		}
-		return state;
-	}
+		return primaryState;
 
-	try
+	for (uint32_t playerIndex = 0; playerIndex < CEMU_EMBED_MAX_GAMEPADS; ++playerIndex)
 	{
-		auto reading = gamepad->GetCurrentReading();
-		state.connected = 1;
-		state.buttons = NormalizeGamepadButtons(reading.Buttons);
-		state.left_x = static_cast<float>(reading.LeftThumbstickX);
-		state.left_y = static_cast<float>(reading.LeftThumbstickY);
-		state.right_x = static_cast<float>(reading.RightThumbstickX);
-		state.right_y = static_cast<float>(reading.RightThumbstickY);
-		state.left_trigger = static_cast<float>(reading.LeftTrigger);
-		state.right_trigger = static_cast<float>(reading.RightTrigger);
+		CemuEmbedGamepadState state{};
+		state.struct_size = sizeof(state);
+		state.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
+		auto gamepad = m_gamepads[playerIndex];
+		if (gamepad)
+		{
+			try
+			{
+				auto reading = gamepad->GetCurrentReading();
+				state.connected = 1;
+				state.buttons = NormalizeGamepadButtons(reading.Buttons);
+				state.left_x = static_cast<float>(reading.LeftThumbstickX);
+				state.left_y = static_cast<float>(reading.LeftThumbstickY);
+				state.right_x = static_cast<float>(reading.RightThumbstickX);
+				state.right_y = static_cast<float>(reading.RightThumbstickY);
+				state.left_trigger = static_cast<float>(reading.LeftTrigger);
+				state.right_trigger = static_cast<float>(reading.RightTrigger);
+			}
+			catch (Platform::Exception^)
+			{
+				// Xbox can revoke a user-device association while the removal event
+				// is still queued. Drop only that slot and keep the other players.
+				m_gamepads[playerIndex] = nullptr;
+			}
+		}
+
+		if (playerIndex == 0)
+			primaryState = state;
+
+		// Do not let UI navigation also control the running Wii U title. Keep
+		// every device connected, but publish neutral readings while options own
+		// controller navigation.
+		auto publishedState = state;
+		if (m_gameRunning && tabsPanel->Visibility == VisibleValue)
+		{
+			publishedState.buttons = 0;
+			publishedState.left_x = 0.0f;
+			publishedState.left_y = 0.0f;
+			publishedState.right_x = 0.0f;
+			publishedState.right_y = 0.0f;
+			publishedState.left_trigger = 0.0f;
+			publishedState.right_trigger = 0.0f;
+		}
+		if (!m_hasPublishedGamepadStates[playerIndex] ||
+			std::memcmp(&publishedState, &m_lastPublishedGamepadStates[playerIndex],
+				sizeof(publishedState)) != 0)
+		{
+			m_main->SetGamepadState(playerIndex, publishedState);
+			m_lastPublishedGamepadStates[playerIndex] = publishedState;
+			m_hasPublishedGamepadStates[playerIndex] = true;
+		}
 	}
-	catch (Platform::Exception^)
-	{
-		// The Xbox may revoke the user-device association while a removal event
-		// is in flight. Do not allow that WinRT exception to escape OnRendering.
-		m_gamepad = nullptr;
-		m_gamepadProfileReady = false;
-	}
-	// Do not let UI navigation also control the running Wii U title. Keep the
-	// device connected so Cemu does not rebuild its input topology; only publish
-	// a neutral reading while the options panel has focus.
-	auto publishedState = state;
-	if (m_gameRunning && tabsPanel->Visibility == VisibleValue)
-	{
-		publishedState.buttons = 0;
-		publishedState.left_x = 0.0f;
-		publishedState.left_y = 0.0f;
-		publishedState.right_x = 0.0f;
-		publishedState.right_y = 0.0f;
-		publishedState.left_trigger = 0.0f;
-		publishedState.right_trigger = 0.0f;
-	}
-	if (!m_hasPublishedGamepadState ||
-		std::memcmp(&publishedState, &m_lastPublishedGamepadState, sizeof(publishedState)) != 0)
-	{
-		m_main->SetGamepadState(publishedState);
-		m_lastPublishedGamepadState = publishedState;
-		m_hasPublishedGamepadState = true;
-	}
-	return state;
+	return primaryState;
 }
 
 void DirectXPage::UpdateActiveAccount()
@@ -2751,17 +2789,16 @@ void DirectXPage::UpdateActiveAccount()
 
 void DirectXPage::TryConfigureDefaultGamepad()
 {
-	if (!m_main || !m_cemuReady || m_gameRunning || !m_gamepad)
+	if (!m_main || !m_cemuReady || m_gameRunning || !m_gamepads[0])
 		return;
 
 	// Do not schedule this through a PPL worker.  The Xbox shell can deliver
 	// Gamepad events while that worker races the Cemu input/update threads.
 	// This call only consumes the already-published POD state and is made on
 	// the XAML thread, before a title is allowed to run.
-	const auto state = PublishGamepadState();
+	const auto state = PublishGamepadStates();
 	if (!state.connected)
 	{
-		m_gamepadProfileReady = false;
 		UpdateGamepadStatus();
 		return;
 	}
