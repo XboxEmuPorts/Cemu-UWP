@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>Cemu</value>
+    <comment>Cemu</comment>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>适用于 UWP 的 Cemu Wii U 模拟器。</value>
+    <comment>Cemu Wii U emulator for UWP.</comment>
+  </data>
+  <data name="Text_0C4A3BA3C58844D9" xml:space="preserve">
+    <value>  确认     B  返回     ↕  导航     MENU  选项</value>
+    <comment>  Confirm     B  Back     ↕  Navigate     MENU  Options</comment>
+  </data>
+  <data name="Text_07FC0307B4BCFE7E" xml:space="preserve">
+    <value>0%</value>
+    <comment>0%</comment>
+  </data>
+  <data name="Text_AF63FC4C860222EC" xml:space="preserve">
+    <value>A</value>
+    <comment>A</comment>
+  </data>
+  <data name="Text_244593378C866F36" xml:space="preserve">
+    <value>账户不可用</value>
+    <comment>Account unavailable</comment>
+  </data>
+  <data name="Text_0126073BF7AD06B5" xml:space="preserve">
+    <value>异步着色器编译</value>
+    <comment>Async shader compile</comment>
+  </data>
+  <data name="Text_08E6BD98452E6BB9" xml:space="preserve">
+    <value>音频</value>
+    <comment>Audio</comment>
+  </data>
+  <data name="Text_8298348E767E1469" xml:space="preserve">
+    <value>音频后端</value>
+    <comment>Audio backend</comment>
+  </data>
+  <data name="Text_DB73788B3C975F16" xml:space="preserve">
+    <value>自动</value>
+    <comment>Auto</comment>
+  </data>
+  <data name="Text_D7B51225756BAA0A" xml:space="preserve">
+    <value>双三次</value>
+    <comment>Bicubic</comment>
+  </data>
+  <data name="Text_144B29AC5A3A47C0" xml:space="preserve">
+    <value>双三次 Hermite</value>
+    <comment>Bicubic Hermite</comment>
+  </data>
+  <data name="Text_0085C330177AE924" xml:space="preserve">
+    <value>Botanical Arcade</value>
+    <comment>Botanical Arcade</comment>
+  </data>
+  <data name="Text_5C731E6B024533B3" xml:space="preserve">
+    <value>下方居中</value>
+    <comment>Bottom center</comment>
+  </data>
+  <data name="Text_EF23DD271EDD4A8B" xml:space="preserve">
+    <value>左下</value>
+    <comment>Bottom left</comment>
+  </data>
+  <data name="Text_CFCB70F2A15EAF14" xml:space="preserve">
+    <value>右下</value>
+    <comment>Bottom right</comment>
+  </data>
+  <data name="Text_32D9F316B7FED5EF" xml:space="preserve">
+    <value>CEMU UWP</value>
+    <comment>CEMU UWP</comment>
+  </data>
+  <data name="Text_D323A19CE1A57AB4" xml:space="preserve">
+    <value>CPU 模式</value>
+    <comment>CPU mode</comment>
+  </data>
+  <data name="Text_6BE36804BED60585" xml:space="preserve">
+    <value>将清除所有游戏的着色器缓存。游戏、存档、设置和图形包都会保留。下次启动时只会重新构建所需的着色器。</value>
+    <comment>Cached shaders for every game will be removed. Games, saves, settings, and Graphic Packs are kept. The next launch rebuilds only the shaders it needs.</comment>
+  </data>
+  <data name="Text_2CEB11BE2290BB1B" xml:space="preserve">
+    <value>取消</value>
+    <comment>Cancel</comment>
+  </data>
+  <data name="Text_94BFD82DF68AA0A7" xml:space="preserve">
+    <value>Cemu 无法挂载或启动所选游戏格式。</value>
+    <comment>Cemu could not mount or launch the selected game format.</comment>
+  </data>
+  <data name="Text_C7B601D89DCEB2A8" xml:space="preserve">
+    <value>Cemu 设置</value>
+    <comment>Cemu settings</comment>
+  </data>
+  <data name="Text_BC822BEA45A7D04A" xml:space="preserve">
+    <value>Cemu 设置当前不可用。</value>
+    <comment>Cemu settings are unavailable.</comment>
+  </data>
+  <data name="Text_B38D497D992AB4A4" xml:space="preserve">
+    <value>中间</value>
+    <comment>Center</comment>
+  </data>
+  <data name="Text_0E44968489E076A8" xml:space="preserve">
+    <value>简体中文</value>
+    <comment>Chinese</comment>
+  </data>
+  <data name="Text_B0A8A28784B74C8F" xml:space="preserve">
+    <value>请先选择 Toy Pad 位置。</value>
+    <comment>Choose a Toy Pad position first.</comment>
+  </data>
+  <data name="Text_D21BE0F80D2B8C9C" xml:space="preserve">
+    <value>选择角色、载具或装置，并将其持久化虚拟标签放到原生 Toy Pad 上。游戏写入的升级数据会自动保存。游戏运行时按 View + Menu 可打开或关闭选项。</value>
+    <comment>Choose a character, vehicle, or gadget and place its persistent virtual tag on the native Toy Pad. Game-written upgrades are saved automatically. Press View + Menu during a game to open or close options.</comment>
+  </data>
+  <data name="Text_95764816F225873D" xml:space="preserve">
+    <value>选择人偶</value>
+    <comment>Choose a figure</comment>
+  </data>
+  <data name="Text_A49CA4DA6F91E67D" xml:space="preserve">
+    <value>请选择一个游戏以管理其已安装的图形包。</value>
+    <comment>Choose a game to manage its installed graphic packs.</comment>
+  </data>
+  <data name="Text_FE41ACCCB7E4C9A4" xml:space="preserve">
+    <value>选择游戏，然后只启用下次启动时要使用的已安装图形包。</value>
+    <comment>Choose a game, then enable only the installed packs you want to use on its next launch.</comment>
+  </data>
+  <data name="Text_E9C47B82B15AE918" xml:space="preserve">
+    <value>请选择人偶和 Toy Pad 位置。</value>
+    <comment>Choose both a figure and a Toy Pad position.</comment>
+  </data>
+  <data name="Text_6FCEBA32213CF461" xml:space="preserve">
+    <value>请选择 Toy Pad 的来源位置和目标位置。</value>
+    <comment>Choose source and destination Toy Pad positions.</comment>
+  </data>
+  <data name="Text_3ED5607AD78D4224" xml:space="preserve">
+    <value>清除缓存</value>
+    <comment>Clear cache</comment>
+  </data>
+  <data name="Text_DB7298B8600ADE86" xml:space="preserve">
+    <value>清除着色器缓存？</value>
+    <comment>Clear shader cache?</comment>
+  </data>
+  <data name="Text_EBF7B4F954C67C7D" xml:space="preserve">
+    <value>正在清除着色器缓存...</value>
+    <comment>Clearing shader cache...</comment>
+  </data>
+  <data name="Text_C01A4C45C6F10D9C" xml:space="preserve">
+    <value>主机语言</value>
+    <comment>Console language</comment>
+  </data>
+  <data name="Text_642A4070F6BCFEE2" xml:space="preserve">
+    <value>内容</value>
+    <comment>Content</comment>
+  </data>
+  <data name="Text_5B92E4E291BF7ECE" xml:space="preserve">
+    <value>控制器           GamePad</value>
+    <comment>Controller       GamePad</comment>
+  </data>
+  <data name="Text_9F59333BE77B2838" xml:space="preserve">
+    <value>控制器电量</value>
+    <comment>Controller battery</comment>
+  </data>
+  <data name="Text_087268699D6033B0" xml:space="preserve">
+    <value>控制器未连接</value>
+    <comment>Controller disconnected</comment>
+  </data>
+  <data name="Text_4EDBBD926BE2203D" xml:space="preserve">
+    <value>控制器配置</value>
+    <comment>Controller profiles</comment>
+  </data>
+  <data name="Text_4896710A000147FB" xml:space="preserve">
+    <value>无法更改 Cemu 性能指标叠加层。</value>
+    <comment>Could not change the Cemu performance metrics overlay.</comment>
+  </data>
+  <data name="Text_90304652F1C32DCB" xml:space="preserve">
+    <value>无法清除着色器缓存；请查看“帮助与错误”</value>
+    <comment>Could not clear the shader cache; see Help and errors</comment>
+  </data>
+  <data name="Text_59EE406F7B1CD213" xml:space="preserve">
+    <value>无法创建或放置 LEGO Dimensions 虚拟标签。</value>
+    <comment>Could not create or place the LEGO Dimensions virtual tag.</comment>
+  </data>
+  <data name="Text_CB256C4AF48EC306" xml:space="preserve">
+    <value>无法删除已安装的游戏；请查看“帮助与错误”</value>
+    <comment>Could not delete the installed game; see Help and errors</comment>
+  </data>
+  <data name="Text_53B8FE87B5DC4C64" xml:space="preserve">
+    <value>无法将本体游戏与已安装的更新和 DLC 一并挂载。</value>
+    <comment>Could not mount the base game with the installed update and DLC.</comment>
+  </data>
+  <data name="Text_F7A953ADE8AEF305" xml:space="preserve">
+    <value>无法准备 Xbox 控制器配置</value>
+    <comment>Could not prepare the Xbox Controller profile</comment>
+  </data>
+  <data name="Text_773A67DF095338B2" xml:space="preserve">
+    <value>无法读取当前 Cemu 设置。</value>
+    <comment>Could not read the current Cemu settings.</comment>
+  </data>
+  <data name="Text_8D409033BC511B37" xml:space="preserve">
+    <value>无法保存 Cemu 设置。</value>
+    <comment>Could not save Cemu settings.</comment>
+  </data>
+  <data name="Text_5C281CFDB87834D2" xml:space="preserve">
+    <value>无法保存所选图形包的状态。</value>
+    <comment>Could not save the selected graphic pack state.</comment>
+  </data>
+  <data name="Text_76FA2DF468EE3970" xml:space="preserve">
+    <value>无法启动已安装的游戏</value>
+    <comment>Could not start the installed game</comment>
+  </data>
+  <data name="Text_6F280CA9EB8B680F" xml:space="preserve">
+    <value>无法启动所选 Wii U 游戏</value>
+    <comment>Could not start the selected Wii U title</comment>
+  </data>
+  <data name="Text_39AE923BE7B3F366" xml:space="preserve">
+    <value>Cubeb</value>
+    <comment>Cubeb</comment>
+  </data>
+  <data name="Text_12A823C1392702F5" xml:space="preserve">
+    <value>默认账户</value>
+    <comment>Default account</comment>
+  </data>
+  <data name="Text_AFD7C24A5F9C94E0" xml:space="preserve">
+    <value>删除“{0}”及其已安装的更新和 DLC？存档数据会保留。</value>
+    <comment>Delete "{0}" together with its installed update and DLC? Save data will be kept.</comment>
+  </data>
+  <data name="Text_41E90E5CC0F5D034" xml:space="preserve">
+    <value>删除游戏</value>
+    <comment>Delete game</comment>
+  </data>
+  <data name="Text_6A3B748E32244283" xml:space="preserve">
+    <value>删除已安装的游戏？</value>
+    <comment>Delete installed game?</comment>
+  </data>
+  <data name="Text_1FDA9B1927F9C14B" xml:space="preserve">
+    <value>正在删除已安装的游戏...</value>
+    <comment>Deleting installed game...</comment>
+  </data>
+  <data name="Text_6A69CDD162DFCB2D" xml:space="preserve">
+    <value>Direct3D 11 是 UWP Host 固定使用的图形后端。</value>
+    <comment>Direct3D 11 is the fixed graphics backend for the UWP host.</comment>
+  </data>
+  <data name="Text_963CA3EDECCD12C3" xml:space="preserve">
+    <value>DirectSound</value>
+    <comment>DirectSound</comment>
+  </data>
+  <data name="Text_77BEAA7C7BD068E5" xml:space="preserve">
+    <value>DirectX 11 · FL 11.0</value>
+    <comment>DirectX 11 · FL 11.0</comment>
+  </data>
+  <data name="Text_3F42D9E90B215260" xml:space="preserve">
+    <value>禁用屏幕保护程序</value>
+    <comment>Disable screen saver</comment>
+  </data>
+  <data name="Text_66722BC2EA775E05" xml:space="preserve">
+    <value>禁用</value>
+    <comment>Disabled</comment>
+  </data>
+  <data name="Text_FC2C3BD345C0128A" xml:space="preserve">
+    <value>未连接</value>
+    <comment>Disconnected</comment>
+  </data>
+  <data name="Text_D3202D161A0070FC" xml:space="preserve">
+    <value>Disney Infinity 底座</value>
+    <comment>Disney Infinity base</comment>
+  </data>
+  <data name="Text_33CC7CBAD24D9ED8" xml:space="preserve">
+    <value>显示 Gamma（0 = sRGB）</value>
+    <comment>Display gamma (0 = sRGB)</comment>
+  </data>
+  <data name="Text_8DBB4155A307C172" xml:space="preserve">
+    <value>下载社区图形包</value>
+    <comment>Download community packs</comment>
+  </data>
+  <data name="Text_ABB9EDB2B1869821" xml:space="preserve">
+    <value>正在下载图形包...</value>
+    <comment>Downloading Graphic Packs...</comment>
+  </data>
+  <data name="Text_1326B9F95AEF495D" xml:space="preserve">
+    <value>缩小滤镜</value>
+    <comment>Downscale filter</comment>
+  </data>
+  <data name="Text_C8C11A0BFB5E5347" xml:space="preserve">
+    <value>双核重编译器（旧版）</value>
+    <comment>Dual-core recompiler (legacy)</comment>
+  </data>
+  <data name="Text_95D56E58F816D211" xml:space="preserve">
+    <value>荷兰语</value>
+    <comment>Dutch</comment>
+  </data>
+  <data name="Text_6FA3528CE8CC1DEB" xml:space="preserve">
+    <value>外部存储</value>
+    <comment>EXTERNAL STORAGE</comment>
+  </data>
+  <data name="Text_C25B8DE7A5A820F7" xml:space="preserve">
+    <value>模拟 USB 设备</value>
+    <comment>Emulated USB devices</comment>
+  </data>
+  <data name="Text_5A523097B08BB2DB" xml:space="preserve">
+    <value>模拟器
+已就绪。</value>
+    <comment>Emulator
+ready.</comment>
+  </data>
+  <data name="Text_965C503C3E42FDFE" xml:space="preserve">
+    <value>已启用</value>
+    <comment>Enabled</comment>
+  </data>
+  <data name="Text_4CAED5B7A7E5D89B" xml:space="preserve">
+    <value>英语</value>
+    <comment>English</comment>
+  </data>
+  <data name="Text_84FCDDEDE27B8E2A" xml:space="preserve">
+    <value>外部</value>
+    <comment>External</comment>
+  </data>
+  <data name="Text_719777C45977BFBB" xml:space="preserve">
+    <value>已移除外部文件夹记录</value>
+    <comment>External folders removed</comment>
+  </data>
+  <data name="Text_7941DEFF30149991" xml:space="preserve">
+    <value>外部扫描完成；有 {0} 个受支持的游戏可从外部存储启动</value>
+    <comment>External scan complete; {0} supported title item(s) ready to launch from external storage</comment>
+  </data>
+  <data name="Text_F624A2C04A15DFAB" xml:space="preserve">
+    <value>外部存储</value>
+    <comment>External storage</comment>
+  </data>
+  <data name="Text_6BC916EB8D98D17C" xml:space="preserve">
+    <value>外部游戏已挂载</value>
+    <comment>External title mounted</comment>
+  </data>
+  <data name="Text_CA86022C2922D784" xml:space="preserve">
+    <value>图形包下载失败；请查看“帮助与错误”</value>
+    <comment>Failed to download Graphic Packs; see Help and errors</comment>
+  </data>
+  <data name="Text_EBFE21A7805A529A" xml:space="preserve">
+    <value>Cemu 或所选 Direct3D 后端初始化失败。</value>
+    <comment>Failed to initialize Cemu or the selected Direct3D backend.</comment>
+  </data>
+  <data name="Text_4B5A0D069B700E0D" xml:space="preserve">
+    <value>模拟器初始化失败</value>
+    <comment>Failed to initialize the emulator</comment>
+  </data>
+  <data name="Text_5432AD3C84273229" xml:space="preserve">
+    <value>人偶</value>
+    <comment>Figure</comment>
+  </data>
+  <data name="Text_75A27F43413E02C5" xml:space="preserve">
+    <value>法语</value>
+    <comment>French</comment>
+  </data>
+  <data name="Text_4C675180CC54B9BA" xml:space="preserve">
+    <value>好友</value>
+    <comment>Friends</comment>
+  </data>
+  <data name="Text_61A67A3435A0624D" xml:space="preserve">
+    <value>全屏缩放</value>
+    <comment>Fullscreen scaling</comment>
+  </data>
+  <data name="Text_84F4C212002AACD2" xml:space="preserve">
+    <value>GX2DrawDone 同步</value>
+    <comment>GX2DrawDone synchronization</comment>
+  </data>
+  <data name="Text_B568A67E05A19907" xml:space="preserve">
+    <value>游戏</value>
+    <comment>Game</comment>
+  </data>
+  <data name="Text_B8E77D2F7747A6AC" xml:space="preserve">
+    <value>游戏运行中</value>
+    <comment>Game running</comment>
+  </data>
+  <data name="Text_2273BB2491056840" xml:space="preserve">
+    <value>GamePad 声道</value>
+    <comment>GamePad channels</comment>
+  </data>
+  <data name="Text_2B9FD5DF74F08BFA" xml:space="preserve">
+    <value>GamePad 音量</value>
+    <comment>GamePad volume</comment>
+  </data>
+  <data name="Text_E2505E23917F48CA" xml:space="preserve">
+    <value>Gamma</value>
+    <comment>Gamma</comment>
+  </data>
+  <data name="Text_C3AC225273C8316B" xml:space="preserve">
+    <value>常规</value>
+    <comment>General</comment>
+  </data>
+  <data name="Text_63E71D20D1EACA93" xml:space="preserve">
+    <value>德语</value>
+    <comment>German</comment>
+  </data>
+  <data name="Text_3E8E1260343DECB7" xml:space="preserve">
+    <value>图形包已是最新版本</value>
+    <comment>Graphic Packs are already up to date</comment>
+  </data>
+  <data name="Text_FC3F353A0821BB25" xml:space="preserve">
+    <value>已为所选游戏禁用图形包。</value>
+    <comment>Graphic pack disabled for the selected game.</comment>
+  </data>
+  <data name="Text_DE7C4C8D658A8B92" xml:space="preserve">
+    <value>已为所选游戏启用图形包。</value>
+    <comment>Graphic pack enabled for the selected game.</comment>
+  </data>
+  <data name="Text_D011764677DB50BD" xml:space="preserve">
+    <value>图形包安装失败。</value>
+    <comment>Graphic pack installation failed.</comment>
+  </data>
+  <data name="Text_6D99C5C46837E76D" xml:space="preserve">
+    <value>图形包</value>
+    <comment>Graphic packs</comment>
+  </data>
+  <data name="Text_25CA13BC05F2B060" xml:space="preserve">
+    <value>Cemu 就绪后即可使用图形包。</value>
+    <comment>Graphic packs become available when Cemu is ready.</comment>
+  </data>
+  <data name="Text_21F4B29C6FC4700C" xml:space="preserve">
+    <value>按游戏管理图形包</value>
+    <comment>Graphic packs by game</comment>
+  </data>
+  <data name="Text_6CC99C2F3CBC7008" xml:space="preserve">
+    <value>图形</value>
+    <comment>Graphics</comment>
+  </data>
+  <data name="Text_81C257F4D416DF2A" xml:space="preserve">
+    <value>图形 API：Direct3D 11</value>
+    <comment>Graphics API: Direct3D 11</comment>
+  </data>
+  <data name="Text_4DAADD8566A2D7B6" xml:space="preserve">
+    <value>帮助与错误</value>
+    <comment>Help and errors</comment>
+  </data>
+  <data name="Text_6ABB1CD87FE0114E" xml:space="preserve">
+    <value>首页</value>
+    <comment>Home</comment>
+  </data>
+  <data name="Text_C8DE6E0C3496E8A1" xml:space="preserve">
+    <value>已安装</value>
+    <comment>INSTALLED</comment>
+  </data>
+  <data name="Text_9088337D085D69DA" xml:space="preserve">
+    <value>如果遇到问题，请查看下方最新消息。完整日志保存在应用的本地数据中。</value>
+    <comment>If something does not work, check the latest message below. The complete log is stored in the app's local data.</comment>
+  </data>
+  <data name="Text_B623CA933C57134B" xml:space="preserve">
+    <value>正在索引外部游戏文件夹...</value>
+    <comment>Indexing external title folders...</comment>
+  </data>
+  <data name="Text_7240896D8D463B57" xml:space="preserve">
+    <value>正在初始化模拟器...</value>
+    <comment>Initializing emulator...</comment>
+  </data>
+  <data name="Text_829F5157185707E1" xml:space="preserve">
+    <value>输入声道</value>
+    <comment>Input channels</comment>
+  </data>
+  <data name="Text_0A7563BE23AF5FEB" xml:space="preserve">
+    <value>输入音量</value>
+    <comment>Input volume</comment>
+  </data>
+  <data name="Text_46A352C8917DCD8A" xml:space="preserve">
+    <value>安装游戏、更新和密钥。</value>
+    <comment>Install games, updates, and keys.</comment>
+  </data>
+  <data name="Text_99519CB5237E7512" xml:space="preserve">
+    <value>安装图形包</value>
+    <comment>Install graphic packs</comment>
+  </data>
+  <data name="Text_DE381FB101595F26" xml:space="preserve">
+    <value>安装图形包</value>
+    <comment>Install packs</comment>
+  </data>
+  <data name="Text_5E383F563AD7EF74" xml:space="preserve">
+    <value>安装完成</value>
+    <comment>Installation complete</comment>
+  </data>
+  <data name="Text_BC676C6781383202" xml:space="preserve">
+    <value>安装失败</value>
+    <comment>Installation failed</comment>
+  </data>
+  <data name="Text_92A5F44F0D3277F1" xml:space="preserve">
+    <value>正在安装内容...</value>
+    <comment>Installing content...</comment>
+  </data>
+  <data name="Text_4C99EEEEE961E9F3" xml:space="preserve">
+    <value>正在安装所选图形包...</value>
+    <comment>Installing selected graphic packs...</comment>
+  </data>
+  <data name="Text_D48CC52117F4D68B" xml:space="preserve">
+    <value>意大利语</value>
+    <comment>Italian</comment>
+  </data>
+  <data name="Text_DD35B688281B6DEA" xml:space="preserve">
+    <value>日语</value>
+    <comment>Japanese</comment>
+  </data>
+  <data name="Text_051235BB34CC753B" xml:space="preserve">
+    <value>保持宽高比</value>
+    <comment>Keep aspect ratio</comment>
+  </data>
+  <data name="Text_94D61907EE22A8C1" xml:space="preserve">
+    <value>韩语</value>
+    <comment>Korean</comment>
+  </data>
+  <data name="Text_83E6AC0505088DAC" xml:space="preserve">
+    <value>LEGO Dimensions Toy Pad</value>
+    <comment>LEGO Dimensions Toy Pad</comment>
+  </data>
+  <data name="Text_85F758233B797D49" xml:space="preserve">
+    <value>游戏库 · CEMU UWP</value>
+    <comment>LIBRARY · CEMU UWP</comment>
+  </data>
+  <data name="Text_53AA0A1F4A4925DB" xml:space="preserve">
+    <value>本地游戏</value>
+    <comment>LOCAL GAMES</comment>
+  </data>
+  <data name="Text_2774DF084CB0A39B" xml:space="preserve">
+    <value>延迟级别</value>
+    <comment>Latency level</comment>
+  </data>
+  <data name="Text_D26033BE39401D6C" xml:space="preserve">
+    <value>左侧：下层 1</value>
+    <comment>Left: lower 1</comment>
+  </data>
+  <data name="Text_D26036BE39402285" xml:space="preserve">
+    <value>左侧：下层 2</value>
+    <comment>Left: lower 2</comment>
+  </data>
+  <data name="Text_911BD3F992D8F97D" xml:space="preserve">
+    <value>左侧：顶部</value>
+    <comment>Left: top</comment>
+  </data>
+  <data name="Text_C0672135930A14F0" xml:space="preserve">
+    <value>游戏库</value>
+    <comment>Library</comment>
+  </data>
+  <data name="Text_E7A532063EF7B740" xml:space="preserve">
+    <value>线性</value>
+    <comment>Linear</comment>
+  </data>
+  <data name="Text_72062FF51C0CB684" xml:space="preserve">
+    <value>正在加载外部游戏</value>
+    <comment>Loading external game</comment>
+  </data>
+  <data name="Text_4E7A1E6121B1F9C6" xml:space="preserve">
+    <value>正在加载游戏库...</value>
+    <comment>Loading library...</comment>
+  </data>
+  <data name="Text_20DD8A4F66435910" xml:space="preserve">
+    <value>本地扫描完成</value>
+    <comment>Local scan complete</comment>
+  </data>
+  <data name="Text_B11508797A8874D9" xml:space="preserve">
+    <value>本地存储</value>
+    <comment>Local storage</comment>
+  </data>
+  <data name="Text_EB441BAAB2639DD8" xml:space="preserve">
+    <value>管理内容，并通过适合手柄操作的界面访问游戏。</value>
+    <comment>Manage content and access your games through a clear, controller-friendly interface.</comment>
+  </data>
+  <data name="Text_2F171DE803C9901B" xml:space="preserve">
+    <value>无需复制游戏即可管理文件夹。</value>
+    <comment>Manage folders without copying games.</comment>
+  </data>
+  <data name="Text_B6F5FB0D44F41996" xml:space="preserve">
+    <value>管理</value>
+    <comment>Management</comment>
+  </data>
+  <data name="Text_37EDF2AEC5AB122A" xml:space="preserve">
+    <value>单声道</value>
+    <comment>Mono</comment>
+  </data>
+  <data name="Text_52A6D034292B0833" xml:space="preserve">
+    <value>正在挂载游戏、更新和 DLC...</value>
+    <comment>Mounting game, update, and DLC...</comment>
+  </data>
+  <data name="Text_5FDF0F5A5BD90BDF" xml:space="preserve">
+    <value>移动现有标签，来源</value>
+    <comment>Move existing tag from</comment>
+  </data>
+  <data name="Text_5EF0C5BADC6B2465" xml:space="preserve">
+    <value>移动到所选位置</value>
+    <comment>Move to selected position</comment>
+  </data>
+  <data name="Text_B09421FE0EAAC0C2" xml:space="preserve">
+    <value>多核重编译器</value>
+    <comment>Multi-core recompiler</comment>
+  </data>
+  <data name="Text_11FE365B042B374D" xml:space="preserve">
+    <value>原生 Toy Pad 已就绪。虚拟标签保存在应用的本地数据中。</value>
+    <comment>Native Toy Pad ready. Virtual tags are stored in the app's local data.</comment>
+  </data>
+  <data name="Text_909821F37DA105F5" xml:space="preserve">
+    <value>最近邻</value>
+    <comment>Nearest neighbor</comment>
+  </data>
+  <data name="Text_7A3F118680C0415B" xml:space="preserve">
+    <value>没有已保存的外部文件夹</value>
+    <comment>No external folders saved</comment>
+  </data>
+  <data name="Text_04DFADB73B0D97B7" xml:space="preserve">
+    <value>没有已安装的游戏</value>
+    <comment>No games installed</comment>
+  </data>
+  <data name="Text_85856C373BDE406A" xml:space="preserve">
+    <value>没有与此游戏兼容的已安装图形包。</value>
+    <comment>No installed graphic packs are compatible with this game.</comment>
+  </data>
+  <data name="Text_5BE3C6D61CD9182F" xml:space="preserve">
+    <value>通知</value>
+    <comment>Notifications</comment>
+  </data>
+  <data name="Text_302CBB19BF9A174A" xml:space="preserve">
+    <value>关闭</value>
+    <comment>Off</comment>
+  </data>
+  <data name="Text_091D5807B5B33550" xml:space="preserve">
+    <value>开启</value>
+    <comment>On</comment>
+  </data>
+  <data name="Text_68EBCF95A250878C" xml:space="preserve">
+    <value>覆盖游戏 Gamma</value>
+    <comment>Override game gamma</comment>
+  </data>
+  <data name="Text_C4F06164194A2925" xml:space="preserve">
+    <value>放置或替换</value>
+    <comment>Place or replace</comment>
+  </data>
+  <data name="Text_C8E0EFAAA0EEA8A2" xml:space="preserve">
+    <value>播放启动音效</value>
+    <comment>Play boot sound</comment>
+  </data>
+  <data name="Text_328F463F3CD599B9" xml:space="preserve">
+    <value>玩家 1 Wii U 控制器</value>
+    <comment>Player 1 Wii U controller</comment>
+  </data>
+  <data name="Text_793CDAD6DCEC30BB" xml:space="preserve">
+    <value>Portal 音量</value>
+    <comment>Portal volume</comment>
+  </data>
+  <data name="Text_CF932840A69DBB7C" xml:space="preserve">
+    <value>葡萄牙语</value>
+    <comment>Portuguese</comment>
+  </data>
+  <data name="Text_C1611C0558728A2A" xml:space="preserve">
+    <value>位置</value>
+    <comment>Position</comment>
+  </data>
+  <data name="Text_82DD390B258B649C" xml:space="preserve">
+    <value>正在准备外部游戏</value>
+    <comment>Preparing external game</comment>
+  </data>
+  <data name="Text_D973C79C0FFAAA6F" xml:space="preserve">
+    <value>正在准备外部存储...</value>
+    <comment>Preparing external storage...</comment>
+  </data>
+  <data name="Text_FB02E90E59ED6BD0" xml:space="preserve">
+    <value>正在准备所选 Wii U 游戏...</value>
+    <comment>Preparing selected Wii U title...</comment>
+  </data>
+  <data name="Text_709F69EC4736C745" xml:space="preserve">
+    <value>可以启动</value>
+    <comment>Ready to start</comment>
+  </data>
+  <data name="Text_BCC5B969E204E833" xml:space="preserve">
+    <value>正在刷新游戏库...</value>
+    <comment>Refreshing library...</comment>
+  </data>
+  <data name="Text_EA4F08110BB8F15D" xml:space="preserve">
+    <value>移除</value>
+    <comment>Remove</comment>
+  </data>
+  <data name="Text_4F48EA05B76CD2FF" xml:space="preserve">
+    <value>上下翻转渲染</value>
+    <comment>Render upside down</comment>
+  </data>
+  <data name="Text_8CB99E30CC0EAF2F" xml:space="preserve">
+    <value>渲染器           D3D11</value>
+    <comment>Renderer         D3D11</comment>
+  </data>
+  <data name="Text_5EF8F4DFA66AAEE8" xml:space="preserve">
+    <value>资源与维护</value>
+    <comment>Resources and maintenance</comment>
+  </data>
+  <data name="Text_34C984D8FBF3469E" xml:space="preserve">
+    <value>正在恢复外部游戏文件夹...</value>
+    <comment>Restoring external game folders...</comment>
+  </data>
+  <data name="Text_5642A75A49CDD7BF" xml:space="preserve">
+    <value>右侧：下层 1</value>
+    <comment>Right: lower 1</comment>
+  </data>
+  <data name="Text_5642A85A49CDD972" xml:space="preserve">
+    <value>右侧：下层 2</value>
+    <comment>Right: lower 2</comment>
+  </data>
+  <data name="Text_26B3B173FE6ED216" xml:space="preserve">
+    <value>右侧：顶部</value>
+    <comment>Right: top</comment>
+  </data>
+  <data name="Text_A30C12014E955946" xml:space="preserve">
+    <value>俄语</value>
+    <comment>Russian</comment>
+  </data>
+  <data name="Text_288846812349407C" xml:space="preserve">
+    <value>系统</value>
+    <comment>SYSTEM</comment>
+  </data>
+  <data name="Text_4620FBDD270E7DE6" xml:space="preserve">
+    <value>已保存的外部文件夹已断开连接或不可用</value>
+    <comment>Saved external folders are disconnected or unavailable</comment>
+  </data>
+  <data name="Text_35BD6768B3BE7712" xml:space="preserve">
+    <value>缩放与 Gamma</value>
+    <comment>Scaling and gamma</comment>
+  </data>
+  <data name="Text_8A5E33157B086C2F" xml:space="preserve">
+    <value>正在扫描 LocalState\GamesToInstall...</value>
+    <comment>Scanning LocalState\GamesToInstall...</comment>
+  </data>
+  <data name="Text_97ADD6A71C94D16D" xml:space="preserve">
+    <value>正在扫描已保存的外部存储...</value>
+    <comment>Scanning saved external storage...</comment>
+  </data>
+  <data name="Text_6576106C7A56004C" xml:space="preserve">
+    <value>选择游戏</value>
+    <comment>Select a game</comment>
+  </data>
+  <data name="Text_DC814090464BCA04" xml:space="preserve">
+    <value>选择一个游戏
+即可开始。</value>
+    <comment>Select a title
+to get started.</comment>
+  </data>
+  <data name="Text_ED13359E7E5FBEB0" xml:space="preserve">
+    <value>选择已安装的游戏</value>
+    <comment>Select an installed game</comment>
+  </data>
+  <data name="Text_24506E018EB21DE7" xml:space="preserve">
+    <value>会话诊断</value>
+    <comment>Session diagnostics</comment>
+  </data>
+  <data name="Text_9D8B8AA2B404C2C8" xml:space="preserve">
+    <value>设置</value>
+    <comment>Settings</comment>
+  </data>
+  <data name="Text_0399B2A37543C116" xml:space="preserve">
+    <value>设置更改后会自动保存。</value>
+    <comment>Settings are saved automatically when changed.</comment>
+  </data>
+  <data name="Text_B87A79CD69EF137F" xml:space="preserve">
+    <value>Cemu 就绪后即可使用设置。</value>
+    <comment>Settings become available when Cemu is ready.</comment>
+  </data>
+  <data name="Text_28CF1843BE248C15" xml:space="preserve">
+    <value>设置已自动保存。USB 和其他启动选项将在重启应用后生效。</value>
+    <comment>Settings saved automatically. USB and other startup options apply after restarting the app.</comment>
+  </data>
+  <data name="Text_72BC54852C943D04" xml:space="preserve">
+    <value>着色器缓存     0 个着色器</value>
+    <comment>Shader cache     0 shaders</comment>
+  </data>
+  <data name="Text_A4AD46950224A909" xml:space="preserve">
+    <value>着色器缓存     {0} 个着色器</value>
+    <comment>Shader cache     {0} shader</comment>
+  </data>
+  <data name="Text_F7186932A44BFA4E" xml:space="preserve">
+    <value>着色器缓存     {0} 个着色器</value>
+    <comment>Shader cache     {0} shaders</comment>
+  </data>
+  <data name="Text_D8FE42FF8C869706" xml:space="preserve">
+    <value>着色器编译</value>
+    <comment>Shader compiling</comment>
+  </data>
+  <data name="Text_7ACB3702ACE96123" xml:space="preserve">
+    <value>显示性能指标</value>
+    <comment>Show performance metrics</comment>
+  </data>
+  <data name="Text_552FFE31E79285A1" xml:space="preserve">
+    <value>单核解释器</value>
+    <comment>Single-core interpreter</comment>
+  </data>
+  <data name="Text_A79E83DD505E6F89" xml:space="preserve">
+    <value>单核重编译器</value>
+    <comment>Single-core recompiler</comment>
+  </data>
+  <data name="Text_C85333E760B08A3D" xml:space="preserve">
+    <value>Skylanders Portal</value>
+    <comment>Skylanders portal</comment>
+  </data>
+  <data name="Text_51DB4272BF8E5651" xml:space="preserve">
+    <value>所选外部存储中的部分文件夹无法访问，已跳过。</value>
+    <comment>Some folders in the selected external storage could not be accessed and were skipped.</comment>
+  </data>
+  <data name="Text_F1868DC19E3917BB" xml:space="preserve">
+    <value>西班牙语</value>
+    <comment>Spanish</comment>
+  </data>
+  <data name="Text_E52FE26FB483875F" xml:space="preserve">
+    <value>启动游戏</value>
+    <comment>Start game</comment>
+  </data>
+  <data name="Text_5C73B6A46DE9972D" xml:space="preserve">
+    <value>立体声</value>
+    <comment>Stereo</comment>
+  </data>
+  <data name="Text_60CA9EBBF8B6AA4E" xml:space="preserve">
+    <value>请先停止正在运行的游戏，再更改设置。</value>
+    <comment>Stop the running game before changing settings.</comment>
+  </data>
+  <data name="Text_1749014F3F87FA6A" xml:space="preserve">
+    <value>拉伸</value>
+    <comment>Stretch</comment>
+  </data>
+  <data name="Text_73BE3C48387D871B" xml:space="preserve">
+    <value>环绕声</value>
+    <comment>Surround</comment>
+  </data>
+  <data name="Text_5FE3414D01CD50ED" xml:space="preserve">
+    <value>TV 声道</value>
+    <comment>TV channels</comment>
+  </data>
+  <data name="Text_D8DDD85CCF5DED17" xml:space="preserve">
+    <value>TV 音量</value>
+    <comment>TV volume</comment>
+  </data>
+  <data name="Text_DB631D2401E6F120" xml:space="preserve">
+    <value>繁体中文</value>
+    <comment>Taiwanese</comment>
+  </data>
+  <data name="Text_B94C1DC83027DBF0" xml:space="preserve">
+    <value>文字缩放</value>
+    <comment>Text scale</comment>
+  </data>
+  <data name="Text_DED1C93C3B004C91" xml:space="preserve">
+    <value>该 Toy Pad 位置已经是空的。</value>
+    <comment>That Toy Pad position is already empty.</comment>
+  </data>
+  <data name="Text_0BE53487F718253F" xml:space="preserve">
+    <value>游戏画面将在此显示</value>
+    <comment>The game will appear here</comment>
+  </data>
+  <data name="Text_1412AD62A46FB342" xml:space="preserve">
+    <value>原生 LEGO Dimensions 目录不可用。</value>
+    <comment>The native LEGO Dimensions catalog is unavailable.</comment>
+  </data>
+  <data name="Text_5A3D39ABFE9581CC" xml:space="preserve">
+    <value>Cemu 初始化完成后即可使用原生 Toy Pad。</value>
+    <comment>The native Toy Pad will be ready when Cemu finishes initializing.</comment>
+  </data>
+  <data name="Text_1F767C1D6496446B" xml:space="preserve">
+    <value>启动游戏前，所选 Wii U 控制器配置尚未就绪。</value>
+    <comment>The selected Wii U controller profile was not ready before starting the game.</comment>
+  </data>
+  <data name="Text_BD77DE554D87C53C" xml:space="preserve">
+    <value>启动所选游戏前，Wii U 控制器配置尚未就绪。</value>
+    <comment>The selected Wii U controller profile was not ready before starting the selected title.</comment>
+  </data>
+  <data name="Text_08ABD68710A73CD5" xml:space="preserve">
+    <value>所选文件夹不包含有效的 Cemu 图形包，或无法安装。</value>
+    <comment>The selected folder does not contain valid Cemu graphic packs or could not be installed.</comment>
+  </data>
+  <data name="Text_9ADDA43402A2C191" xml:space="preserve">
+    <value>所选 keys.txt 不包含有效的 128 位密钥，或无法保存。</value>
+    <comment>The selected keys.txt contains no valid 128-bit keys or could not be saved.</comment>
+  </data>
+  <data name="Text_D6CE02DA3FE060AD" xml:space="preserve">
+    <value>来源位置为空，或无法移动标签。</value>
+    <comment>The source position is empty or the tag could not be moved.</comment>
+  </data>
+  <data name="Text_3B8B10BABF5A188A" xml:space="preserve">
+    <value>无法放置虚拟标签。请查看“帮助与错误”。</value>
+    <comment>The virtual tag could not be placed. Check Help and errors.</comment>
+  </data>
+  <data name="Text_0CC14A7B46A48F3D" xml:space="preserve">
+    <value>上方居中</value>
+    <comment>Top center</comment>
+  </data>
+  <data name="Text_78673A3539CB1915" xml:space="preserve">
+    <value>左上</value>
+    <comment>Top left</comment>
+  </data>
+  <data name="Text_B0A7E3ADF4A125EE" xml:space="preserve">
+    <value>右上</value>
+    <comment>Top right</comment>
+  </data>
+  <data name="Text_39912C149586920A" xml:space="preserve">
+    <value>Toy Pad</value>
+    <comment>Toy Pad</comment>
+  </data>
+  <data name="Text_0548F181D4A2E599" xml:space="preserve">
+    <value>Toy Pad 位置</value>
+    <comment>Toy Pad position</comment>
+  </data>
+  <data name="Text_1E10DBF069DF0052" xml:space="preserve">
+    <value>USB 设备更改需要重启应用后再启动游戏。</value>
+    <comment>USB-device changes require restarting the app before launching a game.</comment>
+  </data>
+  <data name="Text_BACB7F856B510DBB" xml:space="preserve">
+    <value>更新图形包并管理缓存。</value>
+    <comment>Update packs and manage the cache.</comment>
+  </data>
+  <data name="Text_97C51FC66D696FE0" xml:space="preserve">
+    <value>放大滤镜</value>
+    <comment>Upscale filter</comment>
+  </data>
+  <data name="Text_F104A94583161926" xml:space="preserve">
+    <value>VSync</value>
+    <comment>VSync</comment>
+  </data>
+  <data name="Text_C773DA349B5A70EC" xml:space="preserve">
+    <value>Wii Classic Controller</value>
+    <comment>Wii Classic Controller</comment>
+  </data>
+  <data name="Text_A24EF303A545BBA2" xml:space="preserve">
+    <value>Wii Remote</value>
+    <comment>Wii Remote</comment>
+  </data>
+  <data name="Text_C95FCAB20F573444" xml:space="preserve">
+    <value>Wii U GamePad</value>
+    <comment>Wii U GamePad</comment>
+  </data>
+  <data name="Text_3A6334047CF493F4" xml:space="preserve">
+    <value>Wii U Pro Controller</value>
+    <comment>Wii U Pro Controller</comment>
+  </data>
+  <data name="Text_BF5675CC78B4193E" xml:space="preserve">
+    <value>XAudio 2.7</value>
+    <comment>XAudio 2.7</comment>
+  </data>
+  <data name="Text_02BDC95754F70579" xml:space="preserve">
+    <value>XAudio 2.8（推荐）</value>
+    <comment>XAudio 2.8 (recommended)</comment>
+  </data>
+  <data name="Text_3DEE36C754349E88" xml:space="preserve">
+    <value>无法读取 keys.txt</value>
+    <comment>keys.txt could not be read</comment>
+  </data>
+  <data name="Text_02670608A7B50022" xml:space="preserve">
+    <value>已导入 keys.txt：{0} 个有效密钥</value>
+    <comment>keys.txt imported: {0} valid key(s)</comment>
+  </data>
+  <data name="Text_CC05F78630A4F8F5" xml:space="preserve">
+    <value>未导入 keys.txt</value>
+    <comment>keys.txt was not imported</comment>
+  </data>
+  <data name="Text_4F00B82FCAB00A23" xml:space="preserve">
+    <value>已下载 {0} 个图形包</value>
+    <comment>{0} Graphic Pack(s) downloaded</comment>
+  </data>
+  <data name="Text_923D3A68DB30B052" xml:space="preserve">
+    <value>找到 {0} 个兼容的图形包。更改会分别保存。</value>
+    <comment>{0} compatible graphic pack(s). Changes are saved individually.</comment>
+  </data>
+  <data name="Text_D565D58B31FFEC20" xml:space="preserve">
+    <value>已连接 {0} 个控制器</value>
+    <comment>{0} controller connected</comment>
+  </data>
+  <data name="Text_839E4FE08CC443AB" xml:space="preserve">
+    <value>已连接 {0} 个控制器</value>
+    <comment>{0} controllers connected</comment>
+  </data>
+  <data name="Text_EE61CE2657AB4DDC" xml:space="preserve">
+    <value>已安装 {0} 个图形包。可在此选项卡中分别配置。</value>
+    <comment>{0} graphic pack(s) installed. Configure them individually in this tab.</comment>
+  </data>
+  <data name="Text_C267F96890375A7D" xml:space="preserve">
+    <value>已删除 {0} 个已安装内容文件夹；存档已保留</value>
+    <comment>{0} installed content folder(s) deleted; saves were kept</comment>
+  </data>
+  <data name="Text_F5BB3439FC96457D" xml:space="preserve">
+    <value>已清除 {0} 条着色器缓存记录</value>
+    <comment>{0} shader-cache entries cleared</comment>
+  </data>
+  <data name="Text_CBE5AAD9820E3819" xml:space="preserve">
+    <value>已清除 {0} 条着色器缓存记录</value>
+    <comment>{0} shader-cache entry cleared</comment>
+  </data>
+  <data name="Text_DEC0E9522A2F35FF" xml:space="preserve">
+    <value>×  移除外部文件夹记录</value>
+    <comment>×  Forget external folders</comment>
+  </data>
+  <data name="Text_953CF0FC2DA48FB4" xml:space="preserve">
+    <value>↓  下载图形包</value>
+    <comment>↓  Download graphic packs</comment>
+  </data>
+  <data name="Text_6C102D8D8135792C" xml:space="preserve">
+    <value>↻  重新扫描外部文件夹</value>
+    <comment>↻  Rescan external folders</comment>
+  </data>
+  <data name="Text_A84275247D4510B4" xml:space="preserve">
+    <value>↻  扫描本地文件夹</value>
+    <comment>↻  Scan local folder</comment>
+  </data>
+  <data name="Text_AAB157ADBE6521AE" xml:space="preserve">
+    <value>⌫  清除着色器缓存</value>
+    <comment>⌫  Clear shader cache</comment>
+  </data>
+  <data name="Text_B0A47994A3F0B47C" xml:space="preserve">
+    <value>▤  导入 keys.txt</value>
+    <comment>▤  Import keys.txt</comment>
+  </data>
+  <data name="Text_AF8C130FBA511A8A" xml:space="preserve">
+    <value>▶  打开游戏库</value>
+    <comment>▶  Open library</comment>
+  </data>
+  <data name="Text_F9852DAD69DF651D" xml:space="preserve">
+    <value>●  会话可用</value>
+    <comment>●  SESSION AVAILABLE</comment>
+  </data>
+  <data name="Text_98841F9497EF1A54" xml:space="preserve">
+    <value>● 系统已连接</value>
+    <comment>● SYSTEM CONNECTED</comment>
+  </data>
+  <data name="Text_21397E6988C2668B" xml:space="preserve">
+    <value>✦  模拟</value>
+    <comment>✦  EMULATION</comment>
+  </data>
+  <data name="Text_1E77E32DE6043E54" xml:space="preserve">
+    <value>＋  添加外部文件夹</value>
+    <comment>＋  Add external folder</comment>
+  </data>
+  <data name="Text_238362DC130F34BC" xml:space="preserve">
+    <value>＋  安装内容</value>
+    <comment>＋  Install content</comment>
+  </data>
+  <data name="Text_8E226127F3E923EF" xml:space="preserve">
+    <value>＋  安装图形包</value>
+    <comment>＋  Install graphic packs</comment>
+  </data>
+</root>

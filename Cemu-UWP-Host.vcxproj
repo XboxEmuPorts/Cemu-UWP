@@ -30,7 +30,7 @@
     <ProjectGuid>{c40c9fa6-004d-4062-a42d-7fc4ec98deb3}</ProjectGuid>
     <Keyword>DirectXXamlApp</Keyword>
     <RootNamespace>Cemu_UWP_Host</RootNamespace>
-    <DefaultLanguage>pt-BR</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
@@ -305,6 +305,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Cemu_UWP_HostMain.h" />
+    <ClInclude Include="Localization.h" />
     <ClInclude Include="DirectXPage.xaml.h">
       <DependentUpon>DirectXPage.xaml</DependentUpon>
     </ClInclude>
@@ -316,6 +317,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="Cemu_UWP_HostMain.cpp" />
+    <ClCompile Include="Localization.cpp" />
     <ClCompile Include="DirectXPage.xaml.cpp">
       <DependentUpon>DirectXPage.xaml</DependentUpon>
     </ClCompile>
@@ -327,6 +329,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
