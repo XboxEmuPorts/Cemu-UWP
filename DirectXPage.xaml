@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     IsTabStop="True"
+    SizeChanged="Page_SizeChanged"
     Background="#FFFBFCF9">
 
   <Page.Resources>
@@ -93,7 +94,7 @@
 
   <Grid Background="{StaticResource PageBackgroundBrush}">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="218" />
+      <ColumnDefinition x:Name="navigationColumn" Width="218" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
@@ -102,6 +103,9 @@
             Background="#D6FFFFFC"
             BorderBrush="{StaticResource DividerBrush}"
             BorderThickness="0,0,1,0">
+      <Border.RenderTransform>
+        <ScaleTransform x:Name="navigationScaleTransform" ScaleX="1" ScaleY="1" />
+      </Border.RenderTransform>
       <Grid Padding="18,26,18,18">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
@@ -195,7 +199,11 @@
                 BorderBrush="{StaticResource AccentBlueBrush}"
                 BorderThickness="1"
                 CornerRadius="10"
-                Padding="32,28">
+                Padding="32,28"
+                RenderTransformOrigin="0.5,0.5">
+          <Border.RenderTransform>
+            <ScaleTransform x:Name="externalLoadingScaleTransform" ScaleX="1" ScaleY="1" />
+          </Border.RenderTransform>
           <StackPanel HorizontalAlignment="Stretch">
             <Grid HorizontalAlignment="Center"
                   Width="72"
@@ -271,6 +279,9 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="{StaticResource PanelBrush}">
+        <Grid.RenderTransform>
+          <ScaleTransform x:Name="tabsScaleTransform" ScaleX="1" ScaleY="1" />
+        </Grid.RenderTransform>
         <Pivot x:Name="toolTabs"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
@@ -733,7 +744,11 @@
       <Border x:Name="commandFooter" Grid.Row="1" Canvas.ZIndex="20"
               VerticalAlignment="Bottom" Background="#EDFFFFFC"
               BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,1,0,0"
-              Padding="22,10" IsHitTestVisible="False">
+              Padding="22,10" IsHitTestVisible="False"
+              RenderTransformOrigin="0,1">
+        <Border.RenderTransform>
+          <ScaleTransform x:Name="footerScaleTransform" ScaleX="1" ScaleY="1" />
+        </Border.RenderTransform>
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
