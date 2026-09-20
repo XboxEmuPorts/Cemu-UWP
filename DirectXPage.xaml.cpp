@@ -21,6 +21,7 @@ using namespace Windows::Storage::AccessCache;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::Storage::Streams;
 using namespace Windows::System;
+using namespace Windows::System::Profile;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
@@ -478,6 +479,7 @@ DirectXPage::DirectXPage()
 {
 	InitializeComponent();
 	Localization::Attach(this);
+	ConfigureXboxUiScale();
 	// Registering WGI events on the XAML thread. The host mirrors a plain
 	// controller snapshot into Cemu, so the DLL never has to use a WGI object
 	// from SDL's worker apartment on Xbox.
@@ -514,6 +516,58 @@ DirectXPage::DirectXPage()
 	m_renderingToken =
 		CompositionTarget::Rendering += ref new EventHandler<Platform::Object^>(this, &DirectXPage::OnRendering);
 	UpdateGamepadStatus();
+}
+
+void DirectXPage::ConfigureXboxUiScale()
+{
+	try
+	{
+		auto versionInfo = AnalyticsInfo::VersionInfo;
+		if (!versionInfo || versionInfo->DeviceFamily != "Windows.Xbox")
+			return;
+
+		constexpr double uiScale = 1.6;
+		constexpr double navigationDesignWidth = 218.0;
+		const auto bounds = Window::Current->Bounds;
+		const double designWidth = bounds.Width / uiScale;
+		const double designHeight = bounds.Height / uiScale;
+		const double stageDesignWidth = designWidth - navigationDesignWidth;
+		if (stageDesignWidth <= 0.0 || designHeight <= 0.0)
+			return;
+
+		// Leave the SwapChainPanel in the native Xbox UWP layout. Only the XAML
+		// chrome is laid out at 62.5% size and then rendered at 160%.
+		navigationColumn->Width = GridLength(navigationDesignWidth * uiScale);
+		navigationRail->HorizontalAlignment = Windows::UI::Xaml::HorizontalAlignment::Left;
+		navigationRail->VerticalAlignment = Windows::UI::Xaml::VerticalAlignment::Top;
+		navigationRail->Width = navigationDesignWidth;
+		navigationRail->Height = designHeight;
+		navigationScaleTransform->ScaleX = uiScale;
+		navigationScaleTransform->ScaleY = uiScale;
+
+		tabsPanel->HorizontalAlignment = Windows::UI::Xaml::HorizontalAlignment::Left;
+		tabsPanel->VerticalAlignment = Windows::UI::Xaml::VerticalAlignment::Top;
+		tabsPanel->Width = stageDesignWidth;
+		tabsPanel->Height = designHeight;
+		tabsScaleTransform->ScaleX = uiScale;
+		tabsScaleTransform->ScaleY = uiScale;
+		externalLoadingScaleTransform->ScaleX = uiScale;
+		externalLoadingScaleTransform->ScaleY = uiScale;
+
+		commandFooter->HorizontalAlignment = Windows::UI::Xaml::HorizontalAlignment::Left;
+		commandFooter->Width = stageDesignWidth;
+		footerScaleTransform->ScaleX = uiScale;
+		footerScaleTransform->ScaleY = uiScale;
+	}
+	catch (Platform::Exception^)
+	{
+		// Keep the normal desktop-sized layout if Xbox detection or sizing fails.
+	}
+}
+
+void DirectXPage::Page_SizeChanged(Platform::Object^, SizeChangedEventArgs^)
+{
+	ConfigureXboxUiScale();
 }
 
 void DirectXPage::InitializeEmulator(float width, float height)

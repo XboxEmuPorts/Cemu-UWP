@@ -28,6 +28,8 @@ namespace Cemu_UWP_Host
 		void ResumeRuntime();
 
 	private:
+		void ConfigureXboxUiScale();
+		void Page_SizeChanged(Platform::Object^ sender, Windows::UI::Xaml::SizeChangedEventArgs^ args);
 		void InitializeEmulator(float width, float height);
 		void UpdateEmulatorSurfaceSize(float width, float height);
 		void OnRendering(Platform::Object^ sender, Platform::Object^ args);

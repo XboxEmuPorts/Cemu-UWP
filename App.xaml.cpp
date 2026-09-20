@@ -70,8 +70,8 @@ void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEvent
 		DebugSettings->EnableFrameRateCounter = true;
 	}
 #endif
-	// Layout scaling must be selected before the Frame and page visual tree are
-	// created. Xbox otherwise enlarges every XAML element for ten-foot UI use.
+	// Configure Xbox window bounds before the Frame and page visual tree are
+	// created so the initial layout uses the final presentation bounds.
 	ConfigureWindowBounds();
 
 	auto rootFrame = dynamic_cast<Frame^>(Window::Current->Content);
@@ -118,9 +118,8 @@ void App::ConfigureWindowBounds()
 	{
 		if (!IsXboxDevice())
 			return;
-		// Use desktop-sized effective pixels on Xbox. This is the platform API
-		// specifically provided for disabling Xbox's automatic XAML enlargement;
-		// it has no effect on desktop devices.
+		// Keep Xbox at 100% effective-pixel scaling and size the XAML explicitly
+		// for TV viewing. This avoids the platform's fixed 200% layout scale.
 		ApplicationViewScaling::TrySetDisableLayoutScaling(true);
 		auto view = ApplicationView::GetForCurrentView();
 		// Xbox already presents UWP applications fullscreen. Select only the
