@@ -20,7 +20,7 @@ jobs:
       - name: Checkout Cemu
         uses: actions/checkout@v7
         with:
-          repository: rodrigoandrigo/Cemu
+          repository: XboxEmuPorts/Cemu
           ref: build-msvc-d3d11
           path: Cemu
           submodules: recursive
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout SDL3 UWP
         uses: actions/checkout@v7
         with:
-          repository: rodrigoandrigo/SDL3_UWP
+          repository: XboxEmuPorts/SDL3-UWP
           path: SDL3-uwp
 
       - name: Get Cemu cache key
