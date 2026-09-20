@@ -31,7 +31,20 @@ jobs:
           repository: rodrigoandrigo/SDL3_UWP
           path: SDL3-uwp
 
+      - name: Get Cemu cache key
+        id: cemu-key
+        shell: pwsh
+        run: '"key=$(git -C Cemu rev-parse HEAD)-$(git -C SDL3-uwp rev-parse HEAD)" >> $env:GITHUB_OUTPUT'
+
+      - name: Cache Cemu
+        id: cache-cemu
+        uses: actions/cache@v6
+        with:
+          path: Cemu/bin
+          key: cemu-bin-${{ steps.cemu-key.outputs.key }}
+
       - name: Cache vcpkg
+        if: steps.cache-cemu.outputs.cache-hit != 'true'
         uses: actions/cache@v6
         with:
           path: ~/AppData/Local/vcpkg/archives
@@ -45,10 +58,12 @@ jobs:
           vs-version: '[18.0,19.0)'
 
       - name: Bootstrap vcpkg
+        if: steps.cache-cemu.outputs.cache-hit != 'true'
         shell: pwsh
         run: .\Cemu\dependencies\vcpkg\bootstrap-vcpkg.bat -disableMetrics
 
       - name: Build Cemu
+        if: steps.cache-cemu.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
           cmake -S .\Cemu -B .\Cemu\build `
