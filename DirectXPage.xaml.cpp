@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "DirectXPage.xaml.h"
+#include "Localization.h"
 
 #include <windows.ui.xaml.media.dxinterop.h>
 
@@ -476,6 +477,7 @@ struct __declspec(uuid("45D64A29-A63E-4CB6-B498-5781D298CB4F")) ICoreWindowInter
 DirectXPage::DirectXPage()
 {
 	InitializeComponent();
+	Localization::Attach(this);
 	// Registering WGI events on the XAML thread. The host mirrors a plain
 	// controller snapshot into Cemu, so the DLL never has to use a WGI object
 	// from SDL's worker apartment on Xbox.
@@ -1090,11 +1092,11 @@ void DirectXPage::ClearShaderCache_Click(Platform::Object^, RoutedEventArgs^)
 	if (!m_main || !m_cemuReady || m_libraryBusy || m_gameRunning)
 		return;
 	auto dialog = ref new ContentDialog();
-	dialog->Title = ref new Platform::String(L"Clear shader cache?");
-	dialog->Content = ref new Platform::String(
+	dialog->Title = Localization::GetLiteral(L"Clear shader cache?");
+	dialog->Content = Localization::GetLiteral(
 		L"Cached shaders for every game will be removed. Games, saves, settings, and Graphic Packs are kept. The next launch rebuilds only the shaders it needs.");
-	dialog->PrimaryButtonText = ref new Platform::String(L"Clear cache");
-	dialog->CloseButtonText = ref new Platform::String(L"Cancel");
+	dialog->PrimaryButtonText = Localization::GetLiteral(L"Clear cache");
+	dialog->CloseButtonText = Localization::GetLiteral(L"Cancel");
 	Platform::WeakReference weakThis(this);
 	create_task(dialog->ShowAsync()).then([weakThis](ContentDialogResult result)
 	{
@@ -1338,11 +1340,12 @@ void DirectXPage::DeleteInstalledTitle(uint64_t titleId)
 		return;
 	const std::string titleName = m_installedTitles[titleIndex].name;
 	auto dialog = ref new ContentDialog();
-	dialog->Title = ref new Platform::String(L"Delete installed game?");
-	dialog->Content = FromUtf8("Delete \"" + titleName +
-		"\" together with its installed update and DLC? Save data will be kept.");
-	dialog->PrimaryButtonText = ref new Platform::String(L"Delete game");
-	dialog->CloseButtonText = ref new Platform::String(L"Cancel");
+	dialog->Title = Localization::GetLiteral(L"Delete installed game?");
+	dialog->Content = Localization::Format(
+		L"Delete \"{0}\" together with its installed update and DLC? Save data will be kept.",
+		{ FromUtf8(titleName) });
+	dialog->PrimaryButtonText = Localization::GetLiteral(L"Delete game");
+	dialog->CloseButtonText = Localization::GetLiteral(L"Cancel");
 	Platform::WeakReference weakThis(this);
 	create_task(dialog->ShowAsync()).then([weakThis, titleId](ContentDialogResult result)
 	{
@@ -1986,6 +1989,7 @@ void DirectXPage::RefreshLibrary(bool scanLocalFolder)
 					});
 				cardGrid->Children->Append(deleteButton);
 			}
+			Localization::Attach(cardGrid);
 			card->Child = cardGrid;
 			item->Content = card;
 			page->installedGamesList->Items->Append(item);
@@ -2424,7 +2428,7 @@ void DirectXPage::AppendError(const std::string& message)
 	auto text = FromUtf8(message);
 	if (Dispatcher->HasThreadAccess)
 	{
-		errorsList->Items->Append(text);
+		errorsList->Items->Append(Localization::Get(text));
 		while (errorsList->Items->Size > maxRetainedErrors)
 			errorsList->Items->RemoveAt(0);
 		return;
@@ -2435,7 +2439,7 @@ void DirectXPage::AppendError(const std::string& message)
 		{
 			if (auto page = weakThis.Resolve<DirectXPage>())
 			{
-				page->errorsList->Items->Append(text);
+				page->errorsList->Items->Append(Localization::Get(text));
 				while (page->errorsList->Items->Size > maxRetainedErrors)
 					page->errorsList->Items->RemoveAt(0);
 			}

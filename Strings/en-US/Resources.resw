@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>Cemu</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Cemu Wii U emulator for UWP.</value>
+  </data>
+  <data name="Text_0C4A3BA3C58844D9" xml:space="preserve">
+    <value>  Confirm     B  Back     ↕  Navigate     MENU  Options</value>
+  </data>
+  <data name="Text_07FC0307B4BCFE7E" xml:space="preserve">
+    <value>0%</value>
+  </data>
+  <data name="Text_AF63FC4C860222EC" xml:space="preserve">
+    <value>A</value>
+  </data>
+  <data name="Text_244593378C866F36" xml:space="preserve">
+    <value>Account unavailable</value>
+  </data>
+  <data name="Text_0126073BF7AD06B5" xml:space="preserve">
+    <value>Async shader compile</value>
+  </data>
+  <data name="Text_08E6BD98452E6BB9" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Text_8298348E767E1469" xml:space="preserve">
+    <value>Audio backend</value>
+  </data>
+  <data name="Text_DB73788B3C975F16" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Text_D7B51225756BAA0A" xml:space="preserve">
+    <value>Bicubic</value>
+  </data>
+  <data name="Text_144B29AC5A3A47C0" xml:space="preserve">
+    <value>Bicubic Hermite</value>
+  </data>
+  <data name="Text_0085C330177AE924" xml:space="preserve">
+    <value>Botanical Arcade</value>
+  </data>
+  <data name="Text_5C731E6B024533B3" xml:space="preserve">
+    <value>Bottom center</value>
+  </data>
+  <data name="Text_EF23DD271EDD4A8B" xml:space="preserve">
+    <value>Bottom left</value>
+  </data>
+  <data name="Text_CFCB70F2A15EAF14" xml:space="preserve">
+    <value>Bottom right</value>
+  </data>
+  <data name="Text_32D9F316B7FED5EF" xml:space="preserve">
+    <value>CEMU UWP</value>
+  </data>
+  <data name="Text_D323A19CE1A57AB4" xml:space="preserve">
+    <value>CPU mode</value>
+  </data>
+  <data name="Text_6BE36804BED60585" xml:space="preserve">
+    <value>Cached shaders for every game will be removed. Games, saves, settings, and Graphic Packs are kept. The next launch rebuilds only the shaders it needs.</value>
+  </data>
+  <data name="Text_2CEB11BE2290BB1B" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Text_94BFD82DF68AA0A7" xml:space="preserve">
+    <value>Cemu could not mount or launch the selected game format.</value>
+  </data>
+  <data name="Text_C7B601D89DCEB2A8" xml:space="preserve">
+    <value>Cemu settings</value>
+  </data>
+  <data name="Text_BC822BEA45A7D04A" xml:space="preserve">
+    <value>Cemu settings are unavailable.</value>
+  </data>
+  <data name="Text_B38D497D992AB4A4" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Text_0E44968489E076A8" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="Text_B0A8A28784B74C8F" xml:space="preserve">
+    <value>Choose a Toy Pad position first.</value>
+  </data>
+  <data name="Text_D21BE0F80D2B8C9C" xml:space="preserve">
+    <value>Choose a character, vehicle, or gadget and place its persistent virtual tag on the native Toy Pad. Game-written upgrades are saved automatically. Press View + Menu during a game to open or close options.</value>
+  </data>
+  <data name="Text_95764816F225873D" xml:space="preserve">
+    <value>Choose a figure</value>
+  </data>
+  <data name="Text_A49CA4DA6F91E67D" xml:space="preserve">
+    <value>Choose a game to manage its installed graphic packs.</value>
+  </data>
+  <data name="Text_FE41ACCCB7E4C9A4" xml:space="preserve">
+    <value>Choose a game, then enable only the installed packs you want to use on its next launch.</value>
+  </data>
+  <data name="Text_E9C47B82B15AE918" xml:space="preserve">
+    <value>Choose both a figure and a Toy Pad position.</value>
+  </data>
+  <data name="Text_6FCEBA32213CF461" xml:space="preserve">
+    <value>Choose source and destination Toy Pad positions.</value>
+  </data>
+  <data name="Text_3ED5607AD78D4224" xml:space="preserve">
+    <value>Clear cache</value>
+  </data>
+  <data name="Text_DB7298B8600ADE86" xml:space="preserve">
+    <value>Clear shader cache?</value>
+  </data>
+  <data name="Text_EBF7B4F954C67C7D" xml:space="preserve">
+    <value>Clearing shader cache...</value>
+  </data>
+  <data name="Text_C01A4C45C6F10D9C" xml:space="preserve">
+    <value>Console language</value>
+  </data>
+  <data name="Text_642A4070F6BCFEE2" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Text_5B92E4E291BF7ECE" xml:space="preserve">
+    <value>Controller       GamePad</value>
+  </data>
+  <data name="Text_9F59333BE77B2838" xml:space="preserve">
+    <value>Controller battery</value>
+  </data>
+  <data name="Text_087268699D6033B0" xml:space="preserve">
+    <value>Controller disconnected</value>
+  </data>
+  <data name="Text_4EDBBD926BE2203D" xml:space="preserve">
+    <value>Controller profiles</value>
+  </data>
+  <data name="Text_4896710A000147FB" xml:space="preserve">
+    <value>Could not change the Cemu performance metrics overlay.</value>
+  </data>
+  <data name="Text_90304652F1C32DCB" xml:space="preserve">
+    <value>Could not clear the shader cache; see Help and errors</value>
+  </data>
+  <data name="Text_59EE406F7B1CD213" xml:space="preserve">
+    <value>Could not create or place the LEGO Dimensions virtual tag.</value>
+  </data>
+  <data name="Text_CB256C4AF48EC306" xml:space="preserve">
+    <value>Could not delete the installed game; see Help and errors</value>
+  </data>
+  <data name="Text_53B8FE87B5DC4C64" xml:space="preserve">
+    <value>Could not mount the base game with the installed update and DLC.</value>
+  </data>
+  <data name="Text_F7A953ADE8AEF305" xml:space="preserve">
+    <value>Could not prepare the Xbox Controller profile</value>
+  </data>
+  <data name="Text_773A67DF095338B2" xml:space="preserve">
+    <value>Could not read the current Cemu settings.</value>
+  </data>
+  <data name="Text_8D409033BC511B37" xml:space="preserve">
+    <value>Could not save Cemu settings.</value>
+  </data>
+  <data name="Text_5C281CFDB87834D2" xml:space="preserve">
+    <value>Could not save the selected graphic pack state.</value>
+  </data>
+  <data name="Text_76FA2DF468EE3970" xml:space="preserve">
+    <value>Could not start the installed game</value>
+  </data>
+  <data name="Text_6F280CA9EB8B680F" xml:space="preserve">
+    <value>Could not start the selected Wii U title</value>
+  </data>
+  <data name="Text_39AE923BE7B3F366" xml:space="preserve">
+    <value>Cubeb</value>
+  </data>
+  <data name="Text_12A823C1392702F5" xml:space="preserve">
+    <value>Default account</value>
+  </data>
+  <data name="Text_AFD7C24A5F9C94E0" xml:space="preserve">
+    <value>Delete "{0}" together with its installed update and DLC? Save data will be kept.</value>
+  </data>
+  <data name="Text_41E90E5CC0F5D034" xml:space="preserve">
+    <value>Delete game</value>
+  </data>
+  <data name="Text_6A3B748E32244283" xml:space="preserve">
+    <value>Delete installed game?</value>
+  </data>
+  <data name="Text_1FDA9B1927F9C14B" xml:space="preserve">
+    <value>Deleting installed game...</value>
+  </data>
+  <data name="Text_6A69CDD162DFCB2D" xml:space="preserve">
+    <value>Direct3D 11 is the fixed graphics backend for the UWP host.</value>
+  </data>
+  <data name="Text_963CA3EDECCD12C3" xml:space="preserve">
+    <value>DirectSound</value>
+  </data>
+  <data name="Text_77BEAA7C7BD068E5" xml:space="preserve">
+    <value>DirectX 11 · FL 11.0</value>
+  </data>
+  <data name="Text_3F42D9E90B215260" xml:space="preserve">
+    <value>Disable screen saver</value>
+  </data>
+  <data name="Text_66722BC2EA775E05" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Text_FC2C3BD345C0128A" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="Text_D3202D161A0070FC" xml:space="preserve">
+    <value>Disney Infinity base</value>
+  </data>
+  <data name="Text_33CC7CBAD24D9ED8" xml:space="preserve">
+    <value>Display gamma (0 = sRGB)</value>
+  </data>
+  <data name="Text_8DBB4155A307C172" xml:space="preserve">
+    <value>Download community packs</value>
+  </data>
+  <data name="Text_ABB9EDB2B1869821" xml:space="preserve">
+    <value>Downloading Graphic Packs...</value>
+  </data>
+  <data name="Text_1326B9F95AEF495D" xml:space="preserve">
+    <value>Downscale filter</value>
+  </data>
+  <data name="Text_C8C11A0BFB5E5347" xml:space="preserve">
+    <value>Dual-core recompiler (legacy)</value>
+  </data>
+  <data name="Text_95D56E58F816D211" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
+  <data name="Text_6FA3528CE8CC1DEB" xml:space="preserve">
+    <value>EXTERNAL STORAGE</value>
+  </data>
+  <data name="Text_C25B8DE7A5A820F7" xml:space="preserve">
+    <value>Emulated USB devices</value>
+  </data>
+  <data name="Text_5A523097B08BB2DB" xml:space="preserve">
+    <value>Emulator
+ready.</value>
+  </data>
+  <data name="Text_965C503C3E42FDFE" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Text_4CAED5B7A7E5D89B" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Text_84FCDDEDE27B8E2A" xml:space="preserve">
+    <value>External</value>
+  </data>
+  <data name="Text_719777C45977BFBB" xml:space="preserve">
+    <value>External folders removed</value>
+  </data>
+  <data name="Text_7941DEFF30149991" xml:space="preserve">
+    <value>External scan complete; {0} supported title item(s) ready to launch from external storage</value>
+  </data>
+  <data name="Text_F624A2C04A15DFAB" xml:space="preserve">
+    <value>External storage</value>
+  </data>
+  <data name="Text_6BC916EB8D98D17C" xml:space="preserve">
+    <value>External title mounted</value>
+  </data>
+  <data name="Text_CA86022C2922D784" xml:space="preserve">
+    <value>Failed to download Graphic Packs; see Help and errors</value>
+  </data>
+  <data name="Text_EBFE21A7805A529A" xml:space="preserve">
+    <value>Failed to initialize Cemu or the selected Direct3D backend.</value>
+  </data>
+  <data name="Text_4B5A0D069B700E0D" xml:space="preserve">
+    <value>Failed to initialize the emulator</value>
+  </data>
+  <data name="Text_5432AD3C84273229" xml:space="preserve">
+    <value>Figure</value>
+  </data>
+  <data name="Text_75A27F43413E02C5" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="Text_4C675180CC54B9BA" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Text_61A67A3435A0624D" xml:space="preserve">
+    <value>Fullscreen scaling</value>
+  </data>
+  <data name="Text_84F4C212002AACD2" xml:space="preserve">
+    <value>GX2DrawDone synchronization</value>
+  </data>
+  <data name="Text_B568A67E05A19907" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="Text_B8E77D2F7747A6AC" xml:space="preserve">
+    <value>Game running</value>
+  </data>
+  <data name="Text_2273BB2491056840" xml:space="preserve">
+    <value>GamePad channels</value>
+  </data>
+  <data name="Text_2B9FD5DF74F08BFA" xml:space="preserve">
+    <value>GamePad volume</value>
+  </data>
+  <data name="Text_E2505E23917F48CA" xml:space="preserve">
+    <value>Gamma</value>
+  </data>
+  <data name="Text_C3AC225273C8316B" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Text_63E71D20D1EACA93" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Text_3E8E1260343DECB7" xml:space="preserve">
+    <value>Graphic Packs are already up to date</value>
+  </data>
+  <data name="Text_FC3F353A0821BB25" xml:space="preserve">
+    <value>Graphic pack disabled for the selected game.</value>
+  </data>
+  <data name="Text_DE7C4C8D658A8B92" xml:space="preserve">
+    <value>Graphic pack enabled for the selected game.</value>
+  </data>
+  <data name="Text_D011764677DB50BD" xml:space="preserve">
+    <value>Graphic pack installation failed.</value>
+  </data>
+  <data name="Text_6D99C5C46837E76D" xml:space="preserve">
+    <value>Graphic packs</value>
+  </data>
+  <data name="Text_25CA13BC05F2B060" xml:space="preserve">
+    <value>Graphic packs become available when Cemu is ready.</value>
+  </data>
+  <data name="Text_21F4B29C6FC4700C" xml:space="preserve">
+    <value>Graphic packs by game</value>
+  </data>
+  <data name="Text_6CC99C2F3CBC7008" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="Text_81C257F4D416DF2A" xml:space="preserve">
+    <value>Graphics API: Direct3D 11</value>
+  </data>
+  <data name="Text_4DAADD8566A2D7B6" xml:space="preserve">
+    <value>Help and errors</value>
+  </data>
+  <data name="Text_6ABB1CD87FE0114E" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Text_C8DE6E0C3496E8A1" xml:space="preserve">
+    <value>INSTALLED</value>
+  </data>
+  <data name="Text_9088337D085D69DA" xml:space="preserve">
+    <value>If something does not work, check the latest message below. The complete log is stored in the app's local data.</value>
+  </data>
+  <data name="Text_B623CA933C57134B" xml:space="preserve">
+    <value>Indexing external title folders...</value>
+  </data>
+  <data name="Text_7240896D8D463B57" xml:space="preserve">
+    <value>Initializing emulator...</value>
+  </data>
+  <data name="Text_829F5157185707E1" xml:space="preserve">
+    <value>Input channels</value>
+  </data>
+  <data name="Text_0A7563BE23AF5FEB" xml:space="preserve">
+    <value>Input volume</value>
+  </data>
+  <data name="Text_46A352C8917DCD8A" xml:space="preserve">
+    <value>Install games, updates, and keys.</value>
+  </data>
+  <data name="Text_99519CB5237E7512" xml:space="preserve">
+    <value>Install graphic packs</value>
+  </data>
+  <data name="Text_DE381FB101595F26" xml:space="preserve">
+    <value>Install packs</value>
+  </data>
+  <data name="Text_5E383F563AD7EF74" xml:space="preserve">
+    <value>Installation complete</value>
+  </data>
+  <data name="Text_BC676C6781383202" xml:space="preserve">
+    <value>Installation failed</value>
+  </data>
+  <data name="Text_92A5F44F0D3277F1" xml:space="preserve">
+    <value>Installing content...</value>
+  </data>
+  <data name="Text_4C99EEEEE961E9F3" xml:space="preserve">
+    <value>Installing selected graphic packs...</value>
+  </data>
+  <data name="Text_D48CC52117F4D68B" xml:space="preserve">
+    <value>Italian</value>
+  </data>
+  <data name="Text_DD35B688281B6DEA" xml:space="preserve">
+    <value>Japanese</value>
+  </data>
+  <data name="Text_051235BB34CC753B" xml:space="preserve">
+    <value>Keep aspect ratio</value>
+  </data>
+  <data name="Text_94D61907EE22A8C1" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="Text_83E6AC0505088DAC" xml:space="preserve">
+    <value>LEGO Dimensions Toy Pad</value>
+  </data>
+  <data name="Text_85F758233B797D49" xml:space="preserve">
+    <value>LIBRARY · CEMU UWP</value>
+  </data>
+  <data name="Text_53AA0A1F4A4925DB" xml:space="preserve">
+    <value>LOCAL GAMES</value>
+  </data>
+  <data name="Text_2774DF084CB0A39B" xml:space="preserve">
+    <value>Latency level</value>
+  </data>
+  <data name="Text_D26033BE39401D6C" xml:space="preserve">
+    <value>Left: lower 1</value>
+  </data>
+  <data name="Text_D26036BE39402285" xml:space="preserve">
+    <value>Left: lower 2</value>
+  </data>
+  <data name="Text_911BD3F992D8F97D" xml:space="preserve">
+    <value>Left: top</value>
+  </data>
+  <data name="Text_C0672135930A14F0" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="Text_E7A532063EF7B740" xml:space="preserve">
+    <value>Linear</value>
+  </data>
+  <data name="Text_72062FF51C0CB684" xml:space="preserve">
+    <value>Loading external game</value>
+  </data>
+  <data name="Text_4E7A1E6121B1F9C6" xml:space="preserve">
+    <value>Loading library...</value>
+  </data>
+  <data name="Text_20DD8A4F66435910" xml:space="preserve">
+    <value>Local scan complete</value>
+  </data>
+  <data name="Text_B11508797A8874D9" xml:space="preserve">
+    <value>Local storage</value>
+  </data>
+  <data name="Text_EB441BAAB2639DD8" xml:space="preserve">
+    <value>Manage content and access your games through a clear, controller-friendly interface.</value>
+  </data>
+  <data name="Text_2F171DE803C9901B" xml:space="preserve">
+    <value>Manage folders without copying games.</value>
+  </data>
+  <data name="Text_B6F5FB0D44F41996" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Text_37EDF2AEC5AB122A" xml:space="preserve">
+    <value>Mono</value>
+  </data>
+  <data name="Text_52A6D034292B0833" xml:space="preserve">
+    <value>Mounting game, update, and DLC...</value>
+  </data>
+  <data name="Text_5FDF0F5A5BD90BDF" xml:space="preserve">
+    <value>Move existing tag from</value>
+  </data>
+  <data name="Text_5EF0C5BADC6B2465" xml:space="preserve">
+    <value>Move to selected position</value>
+  </data>
+  <data name="Text_B09421FE0EAAC0C2" xml:space="preserve">
+    <value>Multi-core recompiler</value>
+  </data>
+  <data name="Text_11FE365B042B374D" xml:space="preserve">
+    <value>Native Toy Pad ready. Virtual tags are stored in the app's local data.</value>
+  </data>
+  <data name="Text_909821F37DA105F5" xml:space="preserve">
+    <value>Nearest neighbor</value>
+  </data>
+  <data name="Text_7A3F118680C0415B" xml:space="preserve">
+    <value>No external folders saved</value>
+  </data>
+  <data name="Text_04DFADB73B0D97B7" xml:space="preserve">
+    <value>No games installed</value>
+  </data>
+  <data name="Text_85856C373BDE406A" xml:space="preserve">
+    <value>No installed graphic packs are compatible with this game.</value>
+  </data>
+  <data name="Text_5BE3C6D61CD9182F" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Text_302CBB19BF9A174A" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Text_091D5807B5B33550" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Text_68EBCF95A250878C" xml:space="preserve">
+    <value>Override game gamma</value>
+  </data>
+  <data name="Text_C4F06164194A2925" xml:space="preserve">
+    <value>Place or replace</value>
+  </data>
+  <data name="Text_C8E0EFAAA0EEA8A2" xml:space="preserve">
+    <value>Play boot sound</value>
+  </data>
+  <data name="Text_328F463F3CD599B9" xml:space="preserve">
+    <value>Player 1 Wii U controller</value>
+  </data>
+  <data name="Text_793CDAD6DCEC30BB" xml:space="preserve">
+    <value>Portal volume</value>
+  </data>
+  <data name="Text_CF932840A69DBB7C" xml:space="preserve">
+    <value>Portuguese</value>
+  </data>
+  <data name="Text_C1611C0558728A2A" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Text_82DD390B258B649C" xml:space="preserve">
+    <value>Preparing external game</value>
+  </data>
+  <data name="Text_D973C79C0FFAAA6F" xml:space="preserve">
+    <value>Preparing external storage...</value>
+  </data>
+  <data name="Text_FB02E90E59ED6BD0" xml:space="preserve">
+    <value>Preparing selected Wii U title...</value>
+  </data>
+  <data name="Text_709F69EC4736C745" xml:space="preserve">
+    <value>Ready to start</value>
+  </data>
+  <data name="Text_BCC5B969E204E833" xml:space="preserve">
+    <value>Refreshing library...</value>
+  </data>
+  <data name="Text_EA4F08110BB8F15D" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Text_4F48EA05B76CD2FF" xml:space="preserve">
+    <value>Render upside down</value>
+  </data>
+  <data name="Text_8CB99E30CC0EAF2F" xml:space="preserve">
+    <value>Renderer         D3D11</value>
+  </data>
+  <data name="Text_5EF8F4DFA66AAEE8" xml:space="preserve">
+    <value>Resources and maintenance</value>
+  </data>
+  <data name="Text_34C984D8FBF3469E" xml:space="preserve">
+    <value>Restoring external game folders...</value>
+  </data>
+  <data name="Text_5642A75A49CDD7BF" xml:space="preserve">
+    <value>Right: lower 1</value>
+  </data>
+  <data name="Text_5642A85A49CDD972" xml:space="preserve">
+    <value>Right: lower 2</value>
+  </data>
+  <data name="Text_26B3B173FE6ED216" xml:space="preserve">
+    <value>Right: top</value>
+  </data>
+  <data name="Text_A30C12014E955946" xml:space="preserve">
+    <value>Russian</value>
+  </data>
+  <data name="Text_288846812349407C" xml:space="preserve">
+    <value>SYSTEM</value>
+  </data>
+  <data name="Text_4620FBDD270E7DE6" xml:space="preserve">
+    <value>Saved external folders are disconnected or unavailable</value>
+  </data>
+  <data name="Text_35BD6768B3BE7712" xml:space="preserve">
+    <value>Scaling and gamma</value>
+  </data>
+  <data name="Text_8A5E33157B086C2F" xml:space="preserve">
+    <value>Scanning LocalState\GamesToInstall...</value>
+  </data>
+  <data name="Text_97ADD6A71C94D16D" xml:space="preserve">
+    <value>Scanning saved external storage...</value>
+  </data>
+  <data name="Text_6576106C7A56004C" xml:space="preserve">
+    <value>Select a game</value>
+  </data>
+  <data name="Text_DC814090464BCA04" xml:space="preserve">
+    <value>Select a title
+to get started.</value>
+  </data>
+  <data name="Text_ED13359E7E5FBEB0" xml:space="preserve">
+    <value>Select an installed game</value>
+  </data>
+  <data name="Text_24506E018EB21DE7" xml:space="preserve">
+    <value>Session diagnostics</value>
+  </data>
+  <data name="Text_9D8B8AA2B404C2C8" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Text_0399B2A37543C116" xml:space="preserve">
+    <value>Settings are saved automatically when changed.</value>
+  </data>
+  <data name="Text_B87A79CD69EF137F" xml:space="preserve">
+    <value>Settings become available when Cemu is ready.</value>
+  </data>
+  <data name="Text_28CF1843BE248C15" xml:space="preserve">
+    <value>Settings saved automatically. USB and other startup options apply after restarting the app.</value>
+  </data>
+  <data name="Text_72BC54852C943D04" xml:space="preserve">
+    <value>Shader cache     0 shaders</value>
+  </data>
+  <data name="Text_A4AD46950224A909" xml:space="preserve">
+    <value>Shader cache     {0} shader</value>
+  </data>
+  <data name="Text_F7186932A44BFA4E" xml:space="preserve">
+    <value>Shader cache     {0} shaders</value>
+  </data>
+  <data name="Text_D8FE42FF8C869706" xml:space="preserve">
+    <value>Shader compiling</value>
+  </data>
+  <data name="Text_7ACB3702ACE96123" xml:space="preserve">
+    <value>Show performance metrics</value>
+  </data>
+  <data name="Text_552FFE31E79285A1" xml:space="preserve">
+    <value>Single-core interpreter</value>
+  </data>
+  <data name="Text_A79E83DD505E6F89" xml:space="preserve">
+    <value>Single-core recompiler</value>
+  </data>
+  <data name="Text_C85333E760B08A3D" xml:space="preserve">
+    <value>Skylanders portal</value>
+  </data>
+  <data name="Text_51DB4272BF8E5651" xml:space="preserve">
+    <value>Some folders in the selected external storage could not be accessed and were skipped.</value>
+  </data>
+  <data name="Text_F1868DC19E3917BB" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="Text_E52FE26FB483875F" xml:space="preserve">
+    <value>Start game</value>
+  </data>
+  <data name="Text_5C73B6A46DE9972D" xml:space="preserve">
+    <value>Stereo</value>
+  </data>
+  <data name="Text_60CA9EBBF8B6AA4E" xml:space="preserve">
+    <value>Stop the running game before changing settings.</value>
+  </data>
+  <data name="Text_1749014F3F87FA6A" xml:space="preserve">
+    <value>Stretch</value>
+  </data>
+  <data name="Text_73BE3C48387D871B" xml:space="preserve">
+    <value>Surround</value>
+  </data>
+  <data name="Text_5FE3414D01CD50ED" xml:space="preserve">
+    <value>TV channels</value>
+  </data>
+  <data name="Text_D8DDD85CCF5DED17" xml:space="preserve">
+    <value>TV volume</value>
+  </data>
+  <data name="Text_DB631D2401E6F120" xml:space="preserve">
+    <value>Taiwanese</value>
+  </data>
+  <data name="Text_B94C1DC83027DBF0" xml:space="preserve">
+    <value>Text scale</value>
+  </data>
+  <data name="Text_DED1C93C3B004C91" xml:space="preserve">
+    <value>That Toy Pad position is already empty.</value>
+  </data>
+  <data name="Text_0BE53487F718253F" xml:space="preserve">
+    <value>The game will appear here</value>
+  </data>
+  <data name="Text_1412AD62A46FB342" xml:space="preserve">
+    <value>The native LEGO Dimensions catalog is unavailable.</value>
+  </data>
+  <data name="Text_5A3D39ABFE9581CC" xml:space="preserve">
+    <value>The native Toy Pad will be ready when Cemu finishes initializing.</value>
+  </data>
+  <data name="Text_1F767C1D6496446B" xml:space="preserve">
+    <value>The selected Wii U controller profile was not ready before starting the game.</value>
+  </data>
+  <data name="Text_BD77DE554D87C53C" xml:space="preserve">
+    <value>The selected Wii U controller profile was not ready before starting the selected title.</value>
+  </data>
+  <data name="Text_08ABD68710A73CD5" xml:space="preserve">
+    <value>The selected folder does not contain valid Cemu graphic packs or could not be installed.</value>
+  </data>
+  <data name="Text_9ADDA43402A2C191" xml:space="preserve">
+    <value>The selected keys.txt contains no valid 128-bit keys or could not be saved.</value>
+  </data>
+  <data name="Text_D6CE02DA3FE060AD" xml:space="preserve">
+    <value>The source position is empty or the tag could not be moved.</value>
+  </data>
+  <data name="Text_3B8B10BABF5A188A" xml:space="preserve">
+    <value>The virtual tag could not be placed. Check Help and errors.</value>
+  </data>
+  <data name="Text_0CC14A7B46A48F3D" xml:space="preserve">
+    <value>Top center</value>
+  </data>
+  <data name="Text_78673A3539CB1915" xml:space="preserve">
+    <value>Top left</value>
+  </data>
+  <data name="Text_B0A7E3ADF4A125EE" xml:space="preserve">
+    <value>Top right</value>
+  </data>
+  <data name="Text_39912C149586920A" xml:space="preserve">
+    <value>Toy Pad</value>
+  </data>
+  <data name="Text_0548F181D4A2E599" xml:space="preserve">
+    <value>Toy Pad position</value>
+  </data>
+  <data name="Text_1E10DBF069DF0052" xml:space="preserve">
+    <value>USB-device changes require restarting the app before launching a game.</value>
+  </data>
+  <data name="Text_BACB7F856B510DBB" xml:space="preserve">
+    <value>Update packs and manage the cache.</value>
+  </data>
+  <data name="Text_97C51FC66D696FE0" xml:space="preserve">
+    <value>Upscale filter</value>
+  </data>
+  <data name="Text_F104A94583161926" xml:space="preserve">
+    <value>VSync</value>
+  </data>
+  <data name="Text_C773DA349B5A70EC" xml:space="preserve">
+    <value>Wii Classic Controller</value>
+  </data>
+  <data name="Text_A24EF303A545BBA2" xml:space="preserve">
+    <value>Wii Remote</value>
+  </data>
+  <data name="Text_C95FCAB20F573444" xml:space="preserve">
+    <value>Wii U GamePad</value>
+  </data>
+  <data name="Text_3A6334047CF493F4" xml:space="preserve">
+    <value>Wii U Pro Controller</value>
+  </data>
+  <data name="Text_BF5675CC78B4193E" xml:space="preserve">
+    <value>XAudio 2.7</value>
+  </data>
+  <data name="Text_02BDC95754F70579" xml:space="preserve">
+    <value>XAudio 2.8 (recommended)</value>
+  </data>
+  <data name="Text_3DEE36C754349E88" xml:space="preserve">
+    <value>keys.txt could not be read</value>
+  </data>
+  <data name="Text_02670608A7B50022" xml:space="preserve">
+    <value>keys.txt imported: {0} valid key(s)</value>
+  </data>
+  <data name="Text_CC05F78630A4F8F5" xml:space="preserve">
+    <value>keys.txt was not imported</value>
+  </data>
+  <data name="Text_4F00B82FCAB00A23" xml:space="preserve">
+    <value>{0} Graphic Pack(s) downloaded</value>
+  </data>
+  <data name="Text_923D3A68DB30B052" xml:space="preserve">
+    <value>{0} compatible graphic pack(s). Changes are saved individually.</value>
+  </data>
+  <data name="Text_D565D58B31FFEC20" xml:space="preserve">
+    <value>{0} controller connected</value>
+  </data>
+  <data name="Text_839E4FE08CC443AB" xml:space="preserve">
+    <value>{0} controllers connected</value>
+  </data>
+  <data name="Text_EE61CE2657AB4DDC" xml:space="preserve">
+    <value>{0} graphic pack(s) installed. Configure them individually in this tab.</value>
+  </data>
+  <data name="Text_C267F96890375A7D" xml:space="preserve">
+    <value>{0} installed content folder(s) deleted; saves were kept</value>
+  </data>
+  <data name="Text_F5BB3439FC96457D" xml:space="preserve">
+    <value>{0} shader-cache entries cleared</value>
+  </data>
+  <data name="Text_CBE5AAD9820E3819" xml:space="preserve">
+    <value>{0} shader-cache entry cleared</value>
+  </data>
+  <data name="Text_DEC0E9522A2F35FF" xml:space="preserve">
+    <value>×  Forget external folders</value>
+  </data>
+  <data name="Text_953CF0FC2DA48FB4" xml:space="preserve">
+    <value>↓  Download graphic packs</value>
+  </data>
+  <data name="Text_6C102D8D8135792C" xml:space="preserve">
+    <value>↻  Rescan external folders</value>
+  </data>
+  <data name="Text_A84275247D4510B4" xml:space="preserve">
+    <value>↻  Scan local folder</value>
+  </data>
+  <data name="Text_AAB157ADBE6521AE" xml:space="preserve">
+    <value>⌫  Clear shader cache</value>
+  </data>
+  <data name="Text_B0A47994A3F0B47C" xml:space="preserve">
+    <value>▤  Import keys.txt</value>
+  </data>
+  <data name="Text_AF8C130FBA511A8A" xml:space="preserve">
+    <value>▶  Open library</value>
+  </data>
+  <data name="Text_F9852DAD69DF651D" xml:space="preserve">
+    <value>●  SESSION AVAILABLE</value>
+  </data>
+  <data name="Text_98841F9497EF1A54" xml:space="preserve">
+    <value>● SYSTEM CONNECTED</value>
+  </data>
+  <data name="Text_21397E6988C2668B" xml:space="preserve">
+    <value>✦  EMULATION</value>
+  </data>
+  <data name="Text_1E77E32DE6043E54" xml:space="preserve">
+    <value>＋  Add external folder</value>
+  </data>
+  <data name="Text_238362DC130F34BC" xml:space="preserve">
+    <value>＋  Install content</value>
+  </data>
+  <data name="Text_8E226127F3E923EF" xml:space="preserve">
+    <value>＋  Install graphic packs</value>
+  </data>
+</root>

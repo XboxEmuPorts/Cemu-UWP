@@ -16,7 +16,7 @@
   <mp:PhoneIdentity PhoneProductId="9603d93f-a7c7-491d-9d0b-1a0930897231" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Cemu</DisplayName>
+    <DisplayName>ms-resource:AppDisplayName</DisplayName>
     <PublisherDisplayName>rodri</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -34,10 +34,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="Cemu_UWP_Host.App">
       <uap:VisualElements
-        DisplayName="Cemu"
+        DisplayName="ms-resource:AppDisplayName"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Cemu"
+        Description="ms-resource:AppDescription"
         BackgroundColor="#2F3D4B">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#2F3D4B" />
