@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision">
-  <rect width="1200" height="1200" fill="#2F3D4B"/>
-  <g transform="translate(169.480000 473.100000) scale(0.940000000)">
-    <g shape-rendering="geometricPrecision">
-  <path d="M 200,0 H 72 C 32,0 0,32 0,72 V 198 C 0,238 32,270 72,270 H 200 V 210 H 78 C 69,210 62,203 62,194 V 76 C 62,67 69,60 78,60 H 200 Z" fill="#FFFFFF"/>
-  <path d="M 283,60 H 349 C 382,60 405,84 405,116 V 151 C 405,157 401,161 395,164 L 282,205 V 211 C 282,221 289,228 299,228 H 405 V 270 H 280 C 247,270 223,245 223,213 V 118 C 223,85 248,60 283,60 Z M 282,116 C 282,106 289,99 299,99 H 343 C 354,99 361,106 361,116 V 122 L 282,151 Z" fill="#FFFFFF" fill-rule="evenodd"/>
-  <path d="M 466,270 V 130 C 466,102 486,88 514,88 C 544,88 571,105 571,132 V 270" fill="none" stroke="#05DB8D" stroke-width="56" stroke-linecap="butt" stroke-linejoin="round"/>
-  <path d="M 571,132 C 571,103 592,88 620,88 C 652,88 676,106 676,132 V 270" fill="none" stroke="#05DB8D" stroke-width="56" stroke-linecap="butt" stroke-linejoin="round"/>
-  <path d="M 763,60 V 205 C 763,233 785,242 814,242 H 838 C 867,242 888,233 888,205 V 60" fill="none" stroke="#05DB8D" stroke-width="56" stroke-linecap="butt" stroke-linejoin="round"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="388" height="388" viewBox="0 0 388 388">
+  <!-- Full-bleed square background; keep the existing dark green palette. -->
+  <rect width="388" height="388" fill="#115244"/>
+  <!-- Enlarge the centered C-and-leaf silhouette for better legibility at icon sizes. -->
+  <g transform="translate(194 194) scale(1.55) translate(-194 -194) translate(-25 0)">
+    <!-- Approximation of the existing C silhouette for visual approval. -->
+    <path d="M260 127 H198 C169 127 150 145 150 175 V222 C150 249 166 264 194 264 H211 V232 H195 C185 232 183 226 183 217 V175 C183 165 187 159 199 159 H260 Z" fill="#F4F7F6"/>
+    <!-- A single leaf rises naturally from the right of the C. -->
+    <path d="M224 262 C223 235 228 214 249 205 C264 199 278 198 287 181 C288 207 286 229 276 244 C267 259 247 265 224 262 Z" fill="#0BDD8C"/>
+    <path d="M225 261 C237 244 250 230 262 222" fill="none" stroke="#075642" stroke-width="5" stroke-linecap="round"/>
   </g>
 </svg>
