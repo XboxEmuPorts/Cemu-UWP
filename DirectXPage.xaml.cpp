@@ -8,6 +8,7 @@
 #include <array>
 #include <cctype>
 #include <cmath>
+#include <limits>
 #include <iomanip>
 #include <sstream>
 #include <tuple>
@@ -479,6 +480,7 @@ DirectXPage::DirectXPage()
 {
 	InitializeComponent();
 	Localization::Attach(this);
+	m_lastAppliedGamepadRumble.fill(-1.0f);
 	ConfigureXboxUiScale();
 	// Registering WGI events on the XAML thread. The host mirrors a plain
 	// controller snapshot into Cemu, so the DLL never has to use a WGI object
@@ -647,8 +649,8 @@ void DirectXPage::ShutdownRuntime()
 	m_runtimeSuspended = true;
 	SetSystemPointerForUi(true);
 	SetExternalLoadingVisible(false);
-	for (auto& gamepad : m_gamepads)
-		gamepad = nullptr;
+	for (size_t slot = 0; slot < m_gamepads.size(); ++slot)
+		DisconnectGamepadSlot(slot);
 	if (m_main)
 	{
 		m_main->SetVirtualMouse(0, 0, false, false);
@@ -668,6 +670,7 @@ void DirectXPage::ShutdownRuntime()
 	m_gamepadProfileReady = false;
 	m_externalLoadingVisible = false;
 	m_hasPublishedGamepadStates.fill(false);
+	m_lastAppliedGamepadRumble.fill(-1.0f);
 	installedGamesList->Items->Clear();
 	graphicPacksList->Items->Clear();
 	graphicPackGameBox->Items->Clear();
@@ -689,11 +692,44 @@ void DirectXPage::ResumeRuntime()
 	UpdateGamepadStatus();
 }
 
+std::wstring DirectXPage::GetGamepadIdentity(Gamepad^ gamepad) const
+{
+	if (!gamepad)
+		return {};
+	try
+	{
+		auto raw = RawGameController::FromGameController(gamepad);
+		auto value = raw ? raw->NonRoamableId : nullptr;
+		return value ? std::wstring(value->Data(), value->Length()) : std::wstring();
+	}
+	catch (Platform::Exception^)
+	{
+		return {};
+	}
+}
+
+std::wstring DirectXPage::GetGamepadDisplayName(Gamepad^ gamepad) const
+{
+	if (!gamepad)
+		return {};
+	try
+	{
+		auto raw = RawGameController::FromGameController(gamepad);
+		auto value = raw ? raw->DisplayName : nullptr;
+		return value ? std::wstring(value->Data(), value->Length()) : std::wstring();
+	}
+	catch (Platform::Exception^)
+	{
+		return {};
+	}
+}
+
 void DirectXPage::RefreshGamepads()
 {
-	for (auto& gamepad : m_gamepads)
-		gamepad = nullptr;
+	for (size_t slot = 0; slot < m_gamepads.size(); ++slot)
+		DisconnectGamepadSlot(slot);
 	m_hasPublishedGamepadStates.fill(false);
+	m_lastAppliedGamepadRumble.fill(-1.0f);
 	try
 	{
 		auto gamepads = Gamepad::Gamepads;
@@ -701,12 +737,12 @@ void DirectXPage::RefreshGamepads()
 			return;
 		const auto count = (std::min)(static_cast<size_t>(gamepads->Size), m_gamepads.size());
 		for (size_t index = 0; index < count; ++index)
-			m_gamepads[index] = gamepads->GetAt(static_cast<unsigned int>(index));
+			AssignGamepadSlot(gamepads->GetAt(static_cast<unsigned int>(index)));
 	}
 	catch (Platform::Exception^)
 	{
-		for (auto& gamepad : m_gamepads)
-			gamepad = nullptr;
+		for (size_t slot = 0; slot < m_gamepads.size(); ++slot)
+			DisconnectGamepadSlot(slot);
 	}
 }
 
@@ -727,15 +763,103 @@ int DirectXPage::AssignGamepadSlot(Gamepad^ gamepad)
 	const int existing = FindGamepadSlot(gamepad);
 	if (existing >= 0)
 		return existing;
+
+	const auto identity = GetGamepadIdentity(gamepad);
+	const auto displayName = GetGamepadDisplayName(gamepad);
+	if (!identity.empty())
+	{
+		for (size_t index = 0; index < m_gamepadIds.size(); ++index)
+		{
+			if (m_gamepadIds[index] != identity)
+				continue;
+			// A reconnect may be represented by a new WinRT object. Replace the old
+			// handle in-place; a delayed removal event for that stale object then
+			// cannot clear the newly reconnected controller.
+			if (m_gamepads[index] && m_gamepads[index] != gamepad)
+				StopGamepadVibration(m_gamepads[index]);
+			m_gamepads[index] = gamepad;
+			m_gamepadDisconnectedOrder[index] = 0;
+			if (!displayName.empty())
+				m_gamepadNames[index] = displayName;
+			m_hasPublishedGamepadStates[index] = false;
+			m_lastAppliedGamepadRumble[index] = -1.0f;
+			return static_cast<int>(index);
+		}
+	}
+
+	// Prefer a slot that has never belonged to another physical controller.
+	for (size_t index = 0; index < m_gamepads.size(); ++index)
+	{
+		if (m_gamepads[index] != nullptr || !m_gamepadIds[index].empty())
+			continue;
+		m_gamepads[index] = gamepad;
+		m_gamepadIds[index] = identity;
+		m_gamepadNames[index] = displayName;
+		m_gamepadDisconnectedOrder[index] = 0;
+		m_hasPublishedGamepadStates[index] = false;
+		m_lastAppliedGamepadRumble[index] = -1.0f;
+		return static_cast<int>(index);
+	}
+
+	// All player identities have been seen already. Let a genuinely new pad
+	// replace the oldest disconnected reservation instead of requiring a restart.
+	size_t replacement = m_gamepads.size();
+	uint64_t oldestOrder = std::numeric_limits<uint64_t>::max();
 	for (size_t index = 0; index < m_gamepads.size(); ++index)
 	{
 		if (m_gamepads[index] != nullptr)
 			continue;
-		m_gamepads[index] = gamepad;
-		m_hasPublishedGamepadStates[index] = false;
-		return static_cast<int>(index);
+		const auto order = m_gamepadDisconnectedOrder[index];
+		if (replacement == m_gamepads.size() || (order != 0 && order < oldestOrder))
+		{
+			replacement = index;
+			oldestOrder = order == 0 ? std::numeric_limits<uint64_t>::max() : order;
+		}
+	}
+	if (replacement != m_gamepads.size())
+	{
+		m_gamepads[replacement] = gamepad;
+		m_gamepadIds[replacement] = identity;
+		m_gamepadNames[replacement] = displayName;
+		m_gamepadDisconnectedOrder[replacement] = 0;
+		m_hasPublishedGamepadStates[replacement] = false;
+		m_lastAppliedGamepadRumble[replacement] = -1.0f;
+		return static_cast<int>(replacement);
 	}
 	return -1;
+}
+
+void DirectXPage::StopGamepadVibration(Gamepad^ gamepad)
+{
+	if (!gamepad)
+		return;
+	try
+	{
+		GamepadVibration vibration;
+		vibration.LeftMotor = 0.0;
+		vibration.RightMotor = 0.0;
+		vibration.LeftTrigger = 0.0;
+		vibration.RightTrigger = 0.0;
+		gamepad->Vibration = vibration;
+	}
+	catch (Platform::Exception^)
+	{
+	}
+}
+
+void DirectXPage::DisconnectGamepadSlot(size_t slot)
+{
+	if (slot >= m_gamepads.size())
+		return;
+	if (m_gamepads[slot])
+	{
+		StopGamepadVibration(m_gamepads[slot]);
+		m_gamepads[slot] = nullptr;
+		if (!m_gamepadIds[slot].empty())
+			m_gamepadDisconnectedOrder[slot] = ++m_gamepadDisconnectSequence;
+	}
+	m_hasPublishedGamepadStates[slot] = false;
+	m_lastAppliedGamepadRumble[slot] = -1.0f;
 }
 
 void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
@@ -768,6 +892,7 @@ void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
 		SetSystemPointerForUi(false);
 	if (m_main) m_main->Pump();
 	const auto gamepadState = PublishGamepadStates();
+	UpdateGamepadVibration();
 	constexpr uint32_t viewButton = 1u << 4;
 	constexpr uint32_t menuButton = 1u << 6;
 	const bool optionsChord = m_gameRunning &&
@@ -831,7 +956,7 @@ void DirectXPage::OnGamepadRemoved(Platform::Object^, Gamepad^ gamepad)
 			if (!page) return;
 			const int slot = page->FindGamepadSlot(gamepad);
 			if (slot >= 0)
-				page->m_gamepads[static_cast<size_t>(slot)] = nullptr;
+				page->DisconnectGamepadSlot(static_cast<size_t>(slot));
 			page->PublishGamepadStates();
 			if (slot == 0 && page->m_virtualMouseEnabled)
 				page->SetVirtualMouseEnabled(false);
@@ -2354,6 +2479,7 @@ void DirectXPage::SaveSettings()
 	}
 	if (m_gamepads[0])
 		TryConfigureDefaultGamepad();
+	UpdateGamepadStatus();
 	settingsStatus->Text = "Settings saved automatically. USB and other startup options apply after restarting the app.";
 }
 
@@ -2680,6 +2806,34 @@ void DirectXPage::UpdateVirtualMouse(const CemuEmbedGamepadState& gamepad)
 
 void DirectXPage::UpdateGamepadStatus()
 {
+	const wchar_t* controllerTypes[] = {
+		L"Wii U GamePad", L"Wii U Pro Controller", L"Wii Classic Controller", L"Wii Remote"
+	};
+	const int playerOneType = (std::max)(0, (std::min)(emulatedControllerBox->SelectedIndex, 3));
+	std::array<TextBlock^, CEMU_EMBED_MAX_GAMEPADS> rows = {
+		player1ControllerStatus, player2ControllerStatus,
+		player3ControllerStatus, player4ControllerStatus
+	};
+	for (size_t index = 0; index < rows.size(); ++index)
+	{
+		const bool connected = m_gamepads[index] != nullptr;
+		auto type = Localization::GetLiteral(index == 0
+			? controllerTypes[playerOneType] : L"Wii U Pro Controller");
+		auto state = Localization::GetLiteral(connected ? L"Connected" : L"Disconnected");
+		Platform::String^ name = nullptr;
+		if (!m_gamepadNames[index].empty())
+			name = ref new Platform::String(m_gamepadNames[index].c_str());
+		else if (connected)
+			name = Localization::GetLiteral(L"Xbox controller");
+		else
+			name = WinRtString(L"\u2014");
+		std::wostringstream row;
+		row << L"P" << (index + 1) << L"  \u00B7  " << name->Data()
+			<< L"  \u00B7  " << type->Data() << L"  \u00B7  " << state->Data();
+		rows[index]->Text = ref new Platform::String(row.str().c_str());
+		rows[index]->Opacity = connected ? 1.0 : 0.65;
+	}
+
 	size_t connectedCount = 0;
 	for (const auto gamepad : m_gamepads)
 		if (gamepad != nullptr)
@@ -2700,6 +2854,42 @@ void DirectXPage::UpdateGamepadStatus()
 	controllerStatus->Text = ref new Platform::String(text.str().c_str());
 	controllerStatus->Opacity = 1.0;
 	controllerStatusIcon->Opacity = 1.0;
+}
+
+void DirectXPage::UpdateGamepadVibration()
+{
+	if (!m_main)
+		return;
+	for (uint32_t playerIndex = 0; playerIndex < CEMU_EMBED_MAX_GAMEPADS; ++playerIndex)
+	{
+		auto gamepad = m_gamepads[playerIndex];
+		if (!gamepad)
+		{
+			m_lastAppliedGamepadRumble[playerIndex] = -1.0f;
+			continue;
+		}
+
+		float requested = 0.0f;
+		if (!m_main->GetGamepadRumble(playerIndex, requested))
+			continue;
+		requested = (std::max)(0.0f, (std::min)(requested, 1.0f));
+		if (std::abs(requested - m_lastAppliedGamepadRumble[playerIndex]) < 0.001f)
+			continue;
+		try
+		{
+			GamepadVibration vibration;
+			vibration.LeftMotor = requested;
+			vibration.RightMotor = requested;
+			vibration.LeftTrigger = 0.0;
+			vibration.RightTrigger = 0.0;
+			gamepad->Vibration = vibration;
+			m_lastAppliedGamepadRumble[playerIndex] = requested;
+		}
+		catch (Platform::Exception^)
+		{
+			m_lastAppliedGamepadRumble[playerIndex] = -1.0f;
+		}
+	}
 }
 
 CemuEmbedGamepadState DirectXPage::PublishGamepadStates()
@@ -2734,7 +2924,7 @@ CemuEmbedGamepadState DirectXPage::PublishGamepadStates()
 			{
 				// Xbox can revoke a user-device association while the removal event
 				// is still queued. Drop only that slot and keep the other players.
-				m_gamepads[playerIndex] = nullptr;
+				DisconnectGamepadSlot(playerIndex);
 			}
 		}
 

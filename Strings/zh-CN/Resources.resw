@@ -1028,4 +1028,20 @@ to get started.</comment>
     <value>＋  安装图形包</value>
     <comment>＋  Install graphic packs</comment>
   </data>
+  <data name="Text_A281FCC7AEADBFB6" xml:space="preserve">
+    <value>控制器</value>
+    <comment>Controllers</comment>
+  </data>
+  <data name="Text_4250277296392A42" xml:space="preserve">
+    <value>玩家分配仅在本次应用会话中保留。玩家 1 使用所选的 Wii U 控制器类型；玩家 2～4 固定使用 Wii U Pro Controller。</value>
+    <comment>Player assignments are kept for this app session. Player 1 uses the selected Wii U controller type; players 2–4 use Wii U Pro Controller.</comment>
+  </data>
+  <data name="Text_82A4E28AB5B56670" xml:space="preserve">
+    <value>已连接</value>
+    <comment>Connected</comment>
+  </data>
+  <data name="Text_7410E82EBF5FE820" xml:space="preserve">
+    <value>Xbox 控制器</value>
+    <comment>Xbox controller</comment>
+  </data>
 </root>
