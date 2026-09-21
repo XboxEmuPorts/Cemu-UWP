@@ -7,21 +7,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     IsTabStop="True"
+    RequestedTheme="Dark"
     SizeChanged="Page_SizeChanged"
-    Background="#FFFBFCF9">
+    Background="#FF132429">
 
   <Page.Resources>
-    <!-- Arcade Botanico: porcelain surfaces, Circuit Green focus and sage secondary planes. -->
-    <SolidColorBrush x:Key="PageBackgroundBrush" Color="#FFFBFCF9" />
-    <SolidColorBrush x:Key="TopBarBrush" Color="#FFFFFEFC" />
-    <SolidColorBrush x:Key="PanelBrush" Color="#FDFBFCF9" />
-    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="TextBrush" Color="#FF16352B" />
-    <SolidColorBrush x:Key="AccentBlueBrush" Color="#FF0C8B57" />
-    <SolidColorBrush x:Key="AccentBlueHoverBrush" Color="#FF087247" />
-    <SolidColorBrush x:Key="MutedTextBrush" Color="#FF657D72" />
-    <SolidColorBrush x:Key="DividerBrush" Color="#FFD2E5D8" />
-    <SolidColorBrush x:Key="SageBrush" Color="#FFD7F2E4" />
+    <!-- Arcade Botanico: charcoal-green surfaces, Circuit Green focus and muted sage planes. -->
+    <SolidColorBrush x:Key="PageBackgroundBrush" Color="#FF132429" />
+    <SolidColorBrush x:Key="TopBarBrush" Color="#FF14272B" />
+    <SolidColorBrush x:Key="PanelBrush" Color="#FF14262B" />
+    <SolidColorBrush x:Key="CardBrush" Color="#FF213137" />
+    <SolidColorBrush x:Key="TextBrush" Color="#FFE8EFEB" />
+    <SolidColorBrush x:Key="AccentBlueBrush" Color="#FF07875B" />
+    <SolidColorBrush x:Key="AccentBlueHoverBrush" Color="#FF0A9A68" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="#FF9BAFB0" />
+    <SolidColorBrush x:Key="DividerBrush" Color="#FF34454A" />
+    <SolidColorBrush x:Key="SageBrush" Color="#FF153C32" />
 
     <Style x:Key="SectionHeadingStyle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="20" />
@@ -100,7 +101,7 @@
 
     <Border x:Name="navigationRail"
             Grid.Column="0"
-            Background="#D6FFFFFC"
+            Background="#FF14272B"
             BorderBrush="{StaticResource DividerBrush}"
             BorderThickness="0,0,1,0">
       <Border.RenderTransform>
@@ -167,7 +168,7 @@
     <Grid x:Name="emulatorViewport"
           Grid.Row="0"
           Grid.RowSpan="2"
-          Background="#FFEAF5ED"
+          Background="#FF0C1619"
           PointerPressed="EmulatorViewport_PointerPressed"
           SizeChanged="EmulatorViewport_SizeChanged">
       <SwapChainPanel x:Name="emulatorSurface"
@@ -189,7 +190,7 @@
            from looking like a frozen or failed launch. -->
       <Grid x:Name="externalLoadingOverlay"
             Canvas.ZIndex="25"
-            Background="#F2FBFCF9"
+          Background="#F2132429"
             Visibility="Collapsed"
             IsHitTestVisible="True">
         <Border Width="430"
@@ -300,14 +301,14 @@
                     <TextBlock Text="Manage content and access your games through a clear, controller-friendly interface." Style="{StaticResource HelpfulTextStyle}" MaxWidth="310" HorizontalAlignment="Left" />
                   </StackPanel>
                   <Border Grid.Column="1" CornerRadius="30,14,30,14" Padding="24">
-                    <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#FF0A6746" Offset="0"/><GradientStop Color="#FF0C8B57" Offset="0.48"/><GradientStop Color="#FFA5DEC0" Offset="0.49"/><GradientStop Color="#FFEAF7EF" Offset="1"/></LinearGradientBrush></Border.Background>
+                    <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#FF034B32" Offset="0"/><GradientStop Color="#FF035B3A" Offset="0.48"/><GradientStop Color="#FF144B38" Offset="0.49"/><GradientStop Color="#FF19392F" Offset="1"/></LinearGradientBrush></Border.Background>
                     <Grid>
                       <Border HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="15" BorderBrush="#77FFFFFF" BorderThickness="1" Background="#22FFFFFF" Padding="10,6"><TextBlock Text="●  SESSION AVAILABLE" FontFamily="Consolas" FontSize="10" Foreground="White"/></Border>
                       <StackPanel VerticalAlignment="Bottom">
                         <TextBlock Text="LIBRARY · CEMU UWP" FontFamily="Consolas" FontSize="10" Foreground="#FFD6FFE2"/>
                         <TextBlock Text="Select a title&#x0a;to get started." FontSize="34" FontWeight="SemiBold" LineHeight="32" Foreground="White" Margin="0,8,0,13"/>
                         <StackPanel Orientation="Horizontal">
-                          <Button Tag="1" Click="NavigationButton_Click" Background="White" Foreground="#FF086443" BorderThickness="0" CornerRadius="13" Padding="15,9"><TextBlock Text="▶  Open library" FontWeight="SemiBold"/></Button>
+                          <Button Tag="1" Click="NavigationButton_Click" Background="#FFAAF3D0" Foreground="#FF103A2B" BorderThickness="0" CornerRadius="13" Padding="15,9"><TextBlock Text="▶  Open library" FontWeight="SemiBold"/></Button>
                           <TextBlock Text="DirectX 11 · FL 11.0" FontFamily="Consolas" FontSize="10" Foreground="White" VerticalAlignment="Center" Margin="15,0,0,0"/>
                         </StackPanel>
                       </StackPanel>
@@ -347,7 +348,7 @@
           <PivotItem Header="Library">
             <Grid Padding="24,14,24,22">
               <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
-              <Border CornerRadius="16" Background="#FF10382B" Padding="16" Margin="0,0,0,14">
+              <Border CornerRadius="16" Background="#FF10412F" Padding="16" Margin="0,0,0,14">
                 <Grid>
                   <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                   <StackPanel VerticalAlignment="Center"><TextBlock Text="SYSTEM" FontFamily="Consolas" FontSize="10" Foreground="#FFA5DEC0"/><TextBlock x:Name="selectedGameStatus" Text="Select a game" FontSize="20" FontWeight="SemiBold" Foreground="White" TextTrimming="CharacterEllipsis"/></StackPanel>
@@ -356,10 +357,10 @@
                     <TextBlock Text="Controller       GamePad" FontFamily="Consolas" FontSize="10" Foreground="#FFB9D8CA" Margin="0,4,0,0"/>
                     <TextBlock x:Name="rendererMetricsText" Text="Renderer         D3D11" FontFamily="Consolas" FontSize="10" Foreground="#FFB9D8CA" Margin="0,4,0,0"/>
                   </StackPanel>
-                  <Button x:Name="startButton" Grid.Column="2" Content="Start game" Click="StartGame_Click" IsEnabled="False" Visibility="Collapsed" Padding="22,10" VerticalAlignment="Center" Background="White" Foreground="#FF086443" BorderThickness="0" CornerRadius="10"/>
+                  <Button x:Name="startButton" Grid.Column="2" Content="Start game" Click="StartGame_Click" IsEnabled="False" Visibility="Collapsed" Padding="22,10" VerticalAlignment="Center" Background="#FFAAF3D0" Foreground="#FF103A2B" BorderThickness="0" CornerRadius="10"/>
                 </Grid>
               </Border>
-              <Border Grid.Row="1" Background="#FFF7FBF8" BorderBrush="{StaticResource DividerBrush}" BorderThickness="1" CornerRadius="8" Padding="5">
+              <Border Grid.Row="1" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource DividerBrush}" BorderThickness="1" CornerRadius="8" Padding="5">
                 <ListView x:Name="installedGamesList"
                           Background="Transparent"
                           Foreground="{StaticResource TextBrush}"
@@ -375,9 +376,9 @@
                     </ItemsPanelTemplate>
                   </ListView.ItemsPanel>
                   <ListView.Resources>
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#FF0C8B57" />
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#FF087247" />
-                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#55D7F2E4" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#FF07875B" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#FF0A9A68" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#66364E50" />
                     <SolidColorBrush x:Key="ListViewItemForegroundSelected" Color="White" />
                   </ListView.Resources>
                 </ListView>
@@ -515,7 +516,7 @@
                         HorizontalAlignment="Stretch" Margin="0,10,0,10"
                         IsEnabled="False"
                         SelectionChanged="GraphicPackGame_SelectionChanged" />
-              <Border Grid.Row="2" Background="#FFF7FBF8"
+              <Border Grid.Row="2" Background="{StaticResource CardBrush}"
                       BorderBrush="{StaticResource DividerBrush}" BorderThickness="1"
                       CornerRadius="5" Padding="5">
                 <GridView x:Name="graphicPacksList" Background="Transparent"
@@ -708,7 +709,7 @@
               </Grid>
 
               <Border Grid.Row="1"
-                      Background="#FFF7FBF8"
+                      Background="{StaticResource CardBrush}"
                       BorderBrush="{StaticResource DividerBrush}"
                       BorderThickness="1"
                       CornerRadius="5"
@@ -730,7 +731,7 @@
                                    Text="{Binding}"
                                    TextWrapping="Wrap"
                                    FontFamily="Consolas"
-                                   Foreground="#FF7A1F1F" />
+                                   Foreground="#FFFFB4AB" />
                       </Grid>
                     </DataTemplate>
                   </ListView.ItemTemplate>
@@ -742,7 +743,7 @@
       </Grid>
     </Grid>
       <Border x:Name="commandFooter" Grid.Row="1" Canvas.ZIndex="20"
-              VerticalAlignment="Bottom" Background="#EDFFFFFC"
+              VerticalAlignment="Bottom" Background="#FF14272B"
               BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,1,0,0"
               Padding="22,10" IsHitTestVisible="False"
               RenderTransformOrigin="0,1">
