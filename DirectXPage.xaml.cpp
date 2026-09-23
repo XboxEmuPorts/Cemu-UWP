@@ -764,6 +764,8 @@ int DirectXPage::AssignGamepadSlot(Gamepad^ gamepad)
 	if (existing >= 0)
 		return existing;
 
+	// A newly attached device must not inherit its previous motor setting.
+	StopGamepadVibration(gamepad);
 	const auto identity = GetGamepadIdentity(gamepad);
 	const auto displayName = GetGamepadDisplayName(gamepad);
 	if (!identity.empty())
@@ -776,7 +778,7 @@ int DirectXPage::AssignGamepadSlot(Gamepad^ gamepad)
 			// handle in-place; a delayed removal event for that stale object then
 			// cannot clear the newly reconnected controller.
 			if (m_gamepads[index] && m_gamepads[index] != gamepad)
-				StopGamepadVibration(m_gamepads[index]);
+				DisconnectGamepadSlot(index); // Publish the disconnect before replacement.
 			m_gamepads[index] = gamepad;
 			m_gamepadDisconnectedOrder[index] = 0;
 			if (!displayName.empty())
@@ -858,6 +860,15 @@ void DirectXPage::DisconnectGamepadSlot(size_t slot)
 		if (!m_gamepadIds[slot].empty())
 			m_gamepadDisconnectedOrder[slot] = ++m_gamepadDisconnectSequence;
 	}
+	// Clear the core's connected state and rumble immediately, not one frame
+	// later. This also covers a replacement WinRT object with the same identity.
+	if (m_main)
+	{
+		CemuEmbedGamepadState disconnected{};
+		disconnected.struct_size = sizeof(disconnected);
+		disconnected.abi_version = CEMU_EMBED_GAMEPAD_VERSION;
+		m_main->SetGamepadState(static_cast<uint32_t>(slot), disconnected);
+	}
 	m_hasPublishedGamepadStates[slot] = false;
 	m_lastAppliedGamepadRumble[slot] = -1.0f;
 }
@@ -915,7 +926,7 @@ void DirectXPage::OnRendering(Platform::Object^, Platform::Object^)
 	// A controller profile changes Cemu's input topology.  On Xbox this must
 	// complete before the title starts; changing it while Latte is consuming
 	// controller state can terminate the packaged process.
-	if (!m_gameRunning && m_cemuReady && !m_gamepadProfileReady && m_gamepads[0] != nullptr &&
+	if (!m_gameRunning && m_cemuReady && !m_gamepadProfileReady &&
 		++m_gamepadRetryFrames >= 60)
 	{
 		m_gamepadRetryFrames = 0;
@@ -1706,17 +1717,15 @@ void DirectXPage::StartGame_Click(Platform::Object^, RoutedEventArgs^)
 	// Keep Windows.Gaming.Input on the XAML apartment and finish the plain
 	// Cemu profile setup before the game creates its input threads.  This is
 	// the Xbox/Durango-safe lifetime model: no WGI object crosses into Cemu.
-	const auto gamepadState = PublishGamepadStates();
-	if (gamepadState.connected)
-	{
+	PublishGamepadStates();
+	if (!m_gamepadProfileReady)
 		TryConfigureDefaultGamepad();
-		if (!m_gamepadProfileReady)
-		{
-			launchStatus->Text = "Could not prepare the Xbox Controller profile";
-			AppendError("The selected Wii U controller profile was not ready before starting the game.");
-			UpdateGamepadStatus();
-			return;
-		}
+	if (!m_gamepadProfileReady)
+	{
+		launchStatus->Text = "Could not prepare the Xbox Controller profile";
+		AppendError("The selected Wii U controller profile was not ready before starting the game.");
+		UpdateGamepadStatus();
+		return;
 	}
 	SetTabsVisible(false);
 	SetGamePresentation(true);
@@ -1934,16 +1943,14 @@ void DirectXPage::BeginExternalLaunch(std::function<bool()> launchOperation)
 {
 	if (!m_main || !m_cemuReady || m_libraryBusy || m_gameRunning || !launchOperation)
 		return;
-	const auto gamepadState = PublishGamepadStates();
-	if (gamepadState.connected)
-	{
+	PublishGamepadStates();
+	if (!m_gamepadProfileReady)
 		TryConfigureDefaultGamepad();
-		if (!m_gamepadProfileReady)
-		{
-			launchStatus->Text = "Could not prepare the Xbox Controller profile";
-			AppendError("The selected Wii U controller profile was not ready before starting the selected title.");
-			return;
-		}
+	if (!m_gamepadProfileReady)
+	{
+		launchStatus->Text = "Could not prepare the Xbox Controller profile";
+		AppendError("The selected Wii U controller profile was not ready before starting the selected title.");
+		return;
 	}
 
 	m_libraryBusy = true;
@@ -2477,8 +2484,7 @@ void DirectXPage::SaveSettings()
 		settingsStatus->Text = "Could not save Cemu settings.";
 		return;
 	}
-	if (m_gamepads[0])
-		TryConfigureDefaultGamepad();
+	TryConfigureDefaultGamepad();
 	UpdateGamepadStatus();
 	settingsStatus->Text = "Settings saved automatically. USB and other startup options apply after restarting the app.";
 }
@@ -2869,6 +2875,14 @@ void DirectXPage::UpdateGamepadVibration()
 			continue;
 		}
 
+		if (!m_gameRunning)
+		{
+			if (m_lastAppliedGamepadRumble[playerIndex] != 0.0f)
+				StopGamepadVibration(gamepad);
+			m_lastAppliedGamepadRumble[playerIndex] = 0.0f;
+			continue;
+		}
+
 		float requested = 0.0f;
 		if (!m_main->GetGamepadRumble(playerIndex, requested))
 			continue;
@@ -2979,19 +2993,14 @@ void DirectXPage::UpdateActiveAccount()
 
 void DirectXPage::TryConfigureDefaultGamepad()
 {
-	if (!m_main || !m_cemuReady || m_gameRunning || !m_gamepads[0])
+	if (!m_main || !m_cemuReady || m_gameRunning)
 		return;
 
 	// Do not schedule this through a PPL worker.  The Xbox shell can deliver
 	// Gamepad events while that worker races the Cemu input/update threads.
 	// This call only consumes the already-published POD state and is made on
 	// the XAML thread, before a title is allowed to run.
-	const auto state = PublishGamepadStates();
-	if (!state.connected)
-	{
-		UpdateGamepadStatus();
-		return;
-	}
+	PublishGamepadStates();
 	m_gamepadProfileReady = m_main->EnsureDefaultGamepadProfile();
 	UpdateGamepadStatus();
 }
