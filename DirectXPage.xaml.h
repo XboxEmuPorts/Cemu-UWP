@@ -106,6 +106,12 @@ namespace Cemu_UWP_Host
 		void DisconnectGamepadSlot(size_t slot);
 		void RefreshGamepads();
 		void UpdateGamepadStatus();
+		void InitializeGlobalGamepadMappingUi();
+		void LoadGlobalGamepadMapping();
+		void SaveGlobalGamepadMapping();
+		std::array<Windows::UI::Xaml::Controls::ComboBox^, 16> GetGlobalGamepadBindingBoxes() const;
+		CemuEmbedGamepadState ApplyGlobalGamepadMapping(const CemuEmbedGamepadState& raw) const;
+		void ResetGamepadMapping_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ args);
 		void UpdateGamepadVibration();
 		void StopGamepadVibration(Windows::Gaming::Input::Gamepad^ gamepad);
 		CemuEmbedGamepadState PublishGamepadStates();
@@ -161,6 +167,8 @@ namespace Cemu_UWP_Host
 		std::array<CemuEmbedGamepadState, CEMU_EMBED_MAX_GAMEPADS> m_lastPublishedGamepadStates{};
 		std::array<bool, CEMU_EMBED_MAX_GAMEPADS> m_hasPublishedGamepadStates{};
 		std::array<float, CEMU_EMBED_MAX_GAMEPADS> m_lastAppliedGamepadRumble{};
+		std::array<int32_t, 16> m_globalGamepadBindings{
+			1, 0, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 		double m_virtualMouseX = 0.0;
 		double m_virtualMouseY = 0.0;
 		std::chrono::steady_clock::time_point m_virtualMouseLastUpdate{};

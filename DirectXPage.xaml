@@ -653,6 +653,39 @@
                                  Text="P3  ·  —  ·  Wii U Pro Controller  ·  Disconnected" />
                       <TextBlock x:Name="player4ControllerStatus"
                                  Text="P4  ·  —  ·  Wii U Pro Controller  ·  Disconnected" />
+                      <TextBlock Text="Global gameplay button layout"
+                                 FontWeight="SemiBold" Margin="0,10,0,0" />
+                      <TextBlock Text="P1–P4 share this layout. Stick directions stay on their original sticks. Host UI shortcuts and the virtual mouse are not remapped."
+                                 Style="{StaticResource HelpfulTextStyle}" TextWrapping="Wrap" />
+                      <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                          <ComboBox x:Name="gamepadMapABox" Header="Wii U A" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapBBox" Header="Wii U B" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapXBox" Header="Wii U X" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapYBox" Header="Wii U Y" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapLBox" Header="Wii U L" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapRBox" Header="Wii U R" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapZLBox" Header="Wii U ZL" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapZRBox" Header="Wii U ZR" SelectionChanged="SettingsSelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                          <ComboBox x:Name="gamepadMapPlusBox" Header="Wii U +" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapMinusBox" Header="Wii U −" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapUpBox" Header="D-pad Up" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapDownBox" Header="D-pad Down" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapLeftBox" Header="D-pad Left" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapRightBox" Header="D-pad Right" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapStickLBox" Header="Left stick click" SelectionChanged="SettingsSelectionChanged"/>
+                          <ComboBox x:Name="gamepadMapStickRBox" Header="Right stick click" SelectionChanged="SettingsSelectionChanged"/>
+                        </StackPanel>
+                      </Grid>
+                      <Button Content="Restore default button layout"
+                              HorizontalAlignment="Left"
+                              Click="ResetGamepadMapping_Click"/>
                     </StackPanel>
                   </Border>
                   <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource DividerBrush}" BorderThickness="1" CornerRadius="5" Padding="12">

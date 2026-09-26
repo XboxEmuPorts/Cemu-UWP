@@ -476,10 +476,17 @@ struct __declspec(uuid("45D64A29-A63E-4CB6-B498-5781D298CB4F")) ICoreWindowInter
 	virtual HRESULT STDMETHODCALLTYPE put_MessageHandled(boolean value) = 0;
 };
 
+namespace
+{
+constexpr int32_t kDefaultGlobalGamepadBindings[16] =
+	{ 1, 0, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+}
+
 DirectXPage::DirectXPage()
 {
 	InitializeComponent();
 	Localization::Attach(this);
+	InitializeGlobalGamepadMappingUi();
 	m_lastAppliedGamepadRumble.fill(-1.0f);
 	ConfigureXboxUiScale();
 	// Registering WGI events on the XAML thread. The host mirrors a plain
@@ -2342,6 +2349,7 @@ void DirectXPage::LoadSettings()
 		return;
 	}
 	m_loadingSettings = true;
+	LoadGlobalGamepadMapping();
 	auto select = [](ComboBox^ box, int value, int maximum)
 	{
 		box->SelectedIndex = (std::max)(0, (std::min)(value, maximum));
@@ -2484,6 +2492,7 @@ void DirectXPage::SaveSettings()
 		settingsStatus->Text = "Could not save Cemu settings.";
 		return;
 	}
+	SaveGlobalGamepadMapping();
 	TryConfigureDefaultGamepad();
 	UpdateGamepadStatus();
 	settingsStatus->Text = "Settings saved automatically. USB and other startup options apply after restarting the app.";
@@ -2906,6 +2915,140 @@ void DirectXPage::UpdateGamepadVibration()
 	}
 }
 
+std::array<ComboBox^, 16> DirectXPage::GetGlobalGamepadBindingBoxes() const
+{
+	return {
+		gamepadMapABox, gamepadMapBBox, gamepadMapXBox, gamepadMapYBox,
+		gamepadMapLBox, gamepadMapRBox, gamepadMapZLBox, gamepadMapZRBox,
+		gamepadMapPlusBox, gamepadMapMinusBox, gamepadMapUpBox, gamepadMapDownBox,
+		gamepadMapLeftBox, gamepadMapRightBox, gamepadMapStickLBox, gamepadMapStickRBox
+	};
+}
+
+void DirectXPage::InitializeGlobalGamepadMappingUi()
+{
+	static const wchar_t* sourceNames[16] = {
+		L"Xbox A", L"Xbox B", L"Xbox X", L"Xbox Y",
+		L"LB", L"RB", L"LT", L"RT",
+		L"Menu", L"View",
+		L"D-pad Up", L"D-pad Down", L"D-pad Left", L"D-pad Right",
+		L"Left stick click", L"Right stick click"
+	};
+	for (auto box : GetGlobalGamepadBindingBoxes())
+	{
+		if (!box || box->Items->Size != 0)
+			continue;
+		for (const auto name : sourceNames)
+			box->Items->Append(WinRtString(name));
+	}
+}
+
+void DirectXPage::LoadGlobalGamepadMapping()
+{
+	auto values = ApplicationData::Current->LocalSettings->Values;
+	auto boxes = GetGlobalGamepadBindingBoxes();
+	for (size_t index = 0; index < boxes.size(); ++index)
+	{
+		int32_t binding = kDefaultGlobalGamepadBindings[index];
+		const std::wstring key = L"GlobalGamepadBinding" + std::to_wstring(index);
+		auto keyString = ref new Platform::String(key.c_str());
+		if (values->HasKey(keyString))
+		{
+			auto property = dynamic_cast<IPropertyValue^>(values->Lookup(keyString));
+			if (property && property->Type == PropertyType::Int32)
+			{
+				const int32_t stored = property->GetInt32();
+				if (stored >= 0 && stored < 16)
+					binding = stored;
+			}
+		}
+		m_globalGamepadBindings[index] = binding;
+		boxes[index]->SelectedIndex = binding;
+	}
+}
+
+void DirectXPage::SaveGlobalGamepadMapping()
+{
+	auto values = ApplicationData::Current->LocalSettings->Values;
+	auto boxes = GetGlobalGamepadBindingBoxes();
+	for (size_t index = 0; index < boxes.size(); ++index)
+	{
+		const int32_t binding = boxes[index] && boxes[index]->SelectedIndex >= 0
+			? boxes[index]->SelectedIndex : kDefaultGlobalGamepadBindings[index];
+		m_globalGamepadBindings[index] = binding;
+		const std::wstring key = L"GlobalGamepadBinding" + std::to_wstring(index);
+		values->Insert(ref new Platform::String(key.c_str()),
+			PropertyValue::CreateInt32(binding));
+	}
+}
+
+void DirectXPage::ResetGamepadMapping_Click(Platform::Object^, RoutedEventArgs^)
+{
+	if (m_gameRunning)
+	{
+		settingsStatus->Text = "Stop the running game before changing the button layout.";
+		return;
+	}
+	const bool wasLoading = m_loadingSettings;
+	m_loadingSettings = true;
+	auto boxes = GetGlobalGamepadBindingBoxes();
+	for (size_t index = 0; index < boxes.size(); ++index)
+		boxes[index]->SelectedIndex = kDefaultGlobalGamepadBindings[index];
+	m_loadingSettings = wasLoading;
+	if (!wasLoading)
+	{
+		SaveGlobalGamepadMapping();
+		settingsStatus->Text = "Default global button layout restored for P1-P4.";
+	}
+}
+
+CemuEmbedGamepadState DirectXPage::ApplyGlobalGamepadMapping(
+	const CemuEmbedGamepadState& raw) const
+{
+	if (!raw.connected)
+		return raw;
+
+	auto sourceValue = [&raw](int32_t source) -> float
+	{
+		if (source == 6)
+			return raw.left_trigger;
+		if (source == 7)
+			return raw.right_trigger;
+		static const uint32_t sourceBits[16] =
+			{ 0, 1, 2, 3, 9, 10, 0, 0, 6, 4, 11, 12, 13, 14, 7, 8 };
+		if (source < 0 || source >= 16)
+			return 0.0f;
+		return (raw.buttons & (1u << sourceBits[source])) != 0 ? 1.0f : 0.0f;
+	};
+
+	CemuEmbedGamepadState mapped = raw;
+	mapped.buttons = 0;
+	auto setButton = [&](size_t binding, uint32_t targetBit)
+	{
+		if (sourceValue(m_globalGamepadBindings[binding]) >= 0.5f)
+			mapped.buttons |= 1u << targetBit;
+	};
+
+	// Canonical WGI slots consumed by Cemu's VPAD/Pro/Classic mappings.
+	setButton(0, 1);  // Wii U A
+	setButton(1, 0);  // Wii U B
+	setButton(2, 3);  // Wii U X
+	setButton(3, 2);  // Wii U Y
+	setButton(4, 9);  // L
+	setButton(5, 10); // R
+	mapped.left_trigger = sourceValue(m_globalGamepadBindings[6]);
+	mapped.right_trigger = sourceValue(m_globalGamepadBindings[7]);
+	setButton(8, 6);  // Plus / Menu
+	setButton(9, 4);  // Minus / View
+	setButton(10, 11);
+	setButton(11, 12);
+	setButton(12, 13);
+	setButton(13, 14);
+	setButton(14, 7);
+	setButton(15, 8);
+	return mapped;
+}
+
 CemuEmbedGamepadState DirectXPage::PublishGamepadStates()
 {
 	CemuEmbedGamepadState primaryState{};
@@ -2946,9 +3089,12 @@ CemuEmbedGamepadState DirectXPage::PublishGamepadStates()
 			primaryState = state;
 
 		// Do not let UI navigation also control the running Wii U title. Keep
-		// every device connected, but publish neutral readings while options own
+		// every device connected, but first apply the single host-owned gameplay
+		// layout shared by P1-P4. primaryState above deliberately remains raw so
+		// host UI shortcuts and the virtual mouse never inherit gameplay remaps.
+		auto publishedState = ApplyGlobalGamepadMapping(state);
+		// Publish neutral readings while options own
 		// controller navigation.
-		auto publishedState = state;
 		if (m_gameRunning && tabsPanel->Visibility == VisibleValue)
 		{
 			publishedState.buttons = 0;
